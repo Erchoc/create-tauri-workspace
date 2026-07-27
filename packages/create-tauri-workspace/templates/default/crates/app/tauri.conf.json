@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "__PROJECT_DISPLAY_NAME__",
+  "version": "0.1.0",
+  "identifier": "__PROJECT_IDENTIFIER__",
+  "build": {
+    "beforeDevCommand": "bun run --cwd ../../apps/desktop dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "bun run --cwd ../../apps/desktop build",
+    "frontendDist": "../../apps/desktop/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "__PROJECT_DISPLAY_NAME__",
+        "width": 1100,
+        "height": 760,
+        "minWidth": 760,
+        "minHeight": 560,
+        "center": true,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "../../resources/icons/32x32.png",
+      "../../resources/icons/128x128.png",
+      "../../resources/icons/128x128@2x.png",
+      "../../resources/icons/icon.icns",
+      "../../resources/icons/icon.ico"
+    ],
+    "resources": {
+      "../../resources/defaults/": "defaults/",
+      "../../resources/locales/": "locales/",
+      "../../resources/licenses/": "licenses/"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "installerHooks": "../../installers/windows/nsis/hooks.nsh"
+      }
+    }
+  }
+}

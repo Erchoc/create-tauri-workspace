@@ -1,0 +1,20 @@
+{
+  "name": "__PROJECT_SLUG__",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "bun@1.3.11",
+  "workspaces": [
+    "apps/*",
+    "crates/app"
+  ],
+  "scripts": {
+    "dev": "bun run --cwd crates/app tauri dev",
+    "build": "bun run --cwd crates/app tauri build",
+    "tauri": "bun run --cwd crates/app tauri",
+    "frontend:dev": "bun run --cwd apps/desktop dev",
+    "frontend:build": "bun run --cwd apps/desktop build",
+    "check": "bun run frontend:check && cargo check --workspace && cargo clippy --workspace --all-targets -- -D warnings && cargo fmt --all --check",
+    "frontend:check": "bun run --cwd apps/desktop check",
+    "release:check": "node scripts/release-check.mjs"
+  }
+}

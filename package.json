@@ -1,0 +1,15 @@
+{
+  "name": "create-tauri-workspace-repo",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "bun@1.3.11",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "bun run test && bun run pack:dry",
+    "test": "node --test packages/create-tauri-workspace/test/*.test.mjs",
+    "pack": "npm pack --workspace packages/create-tauri-workspace",
+    "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run"
+  }
+}

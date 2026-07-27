@@ -1,0 +1,19 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "create-tauri-workspace-repo",
+    },
+    "packages/create-tauri-workspace": {
+      "name": "create-tauri-workspace",
+      "version": "0.1.0",
+      "bin": {
+        "create-tauri-workspace": "./bin/create-tauri-workspace.mjs",
+      },
+    },
+  },
+  "packages": {
+    "create-tauri-workspace": ["create-tauri-workspace@workspace:packages/create-tauri-workspace"],
+  }
+}

@@ -1,0 +1,56 @@
+name: Release desktop apps
+
+on:
+  push:
+    tags:
+      - "app-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ubuntu-22.04
+            rust-targets: ""
+            args: "--bundles appimage,deb"
+          - platform: windows-latest
+            rust-targets: x86_64-pc-windows-msvc
+            args: "--target x86_64-pc-windows-msvc --bundles nsis"
+          - platform: windows-latest
+            rust-targets: aarch64-pc-windows-msvc
+            args: "--target aarch64-pc-windows-msvc --bundles nsis"
+          - platform: macos-latest
+            rust-targets: aarch64-apple-darwin,x86_64-apple-darwin
+            args: "--target universal-apple-darwin --bundles app,dmg"
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Linux system dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - run: bun install --frozen-lockfile
+      - uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: crates/app
+          tauriScript: bun run tauri
+          tagName: app-v__VERSION__
+          releaseName: "__PROJECT_DISPLAY_NAME__ v__VERSION__"
+          releaseBody: "Download the installer for your platform."
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

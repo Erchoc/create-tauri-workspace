@@ -1,0 +1,14 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.85"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2" }
+tauri-build = { version = "2" }

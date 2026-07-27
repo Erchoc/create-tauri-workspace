@@ -1,0 +1,45 @@
+{
+  "name": "create-tauri-workspace",
+  "version": "0.1.0",
+  "description": "Create an opinionated Tauri 2 workspace with Bun, React, Vite, TypeScript, and Rust.",
+  "type": "module",
+  "bin": {
+    "create-tauri-workspace": "./bin/create-tauri-workspace.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "tauri",
+    "rust",
+    "bun",
+    "vite",
+    "react",
+    "desktop",
+    "generator",
+    "scaffold"
+  ],
+  "author": "Erchoc",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erchoc/create-tauri-workspace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/erchoc/create-tauri-workspace/issues"
+  },
+  "homepage": "https://github.com/erchoc/create-tauri-workspace#readme",
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
