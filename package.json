@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "bun run test && bun run pack:dry",
+    "check": "bun run test && node --check scripts/publish.mjs && bun run pack:dry",
     "test": "node --test packages/create-tauri-workspace/test/*.test.mjs",
     "pack": "npm pack --workspace packages/create-tauri-workspace",
     "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run",

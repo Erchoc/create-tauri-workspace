@@ -77,13 +77,26 @@ Verify the public package:
 
 ```bash
 npm view create-tauri-workspace
+
+verification_directory=$(mktemp -d)
+cd "$verification_directory"
 npx create-tauri-workspace published-smoke-app --no-install --no-git
 ```
+
+Run the `npx` verification outside this monorepo so npm does not prefer the
+local workspace with the same package name.
 
 For later releases, update the package version first:
 
 ```bash
-npm version patch --workspace packages/create-tauri-workspace
+npm version patch \
+  --workspace packages/create-tauri-workspace \
+  --no-git-tag-version
+
+git add packages/create-tauri-workspace/package.json
+git commit -m "chore: release create-tauri-workspace"
+git push
+
 npm run publish
 ```
 

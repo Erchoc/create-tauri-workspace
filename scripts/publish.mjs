@@ -133,7 +133,9 @@ function ensureVersionIsAvailable() {
   );
 
   if (result.status === 0) {
-    fail(`${packageSpec} is already published. Update the package version first.`);
+    fail(
+      `${packageSpec} is already published. Bump the workspace package version, commit, and push before retrying.`,
+    );
   }
 
   const output = `${result.stdout}\n${result.stderr}`;
