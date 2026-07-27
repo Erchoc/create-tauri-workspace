@@ -42,6 +42,20 @@ npm whoami
 The current npm login flow opens a browser. Complete authentication and any
 two-factor challenge, then confirm that `npm whoami` prints your username.
 
+## Enable npm two-factor authentication
+
+npm requires account-level 2FA or a granular token that can bypass 2FA for
+every package publish, including the first release. For an interactive first
+release, enable account 2FA instead of creating a long-lived bypass token:
+
+1. Open your account settings on [npmjs.com](https://www.npmjs.com/).
+2. Under **Two-Factor Authentication**, select **Enable 2FA**.
+3. Register a passkey or security key, such as Touch ID.
+4. Save the recovery codes in a password manager.
+
+After setup, `npm publish` prompts for the configured second factor
+automatically.
+
 ## Publish to npm
 
 ```bash
