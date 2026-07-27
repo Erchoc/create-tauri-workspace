@@ -1,7 +1,7 @@
 {
   "name": "create-tauri-workspace",
   "version": "0.1.0",
-  "description": "Create an opinionated Tauri 2 workspace with Bun, React, Vite, TypeScript, and Rust.",
+  "description": "Scaffold a polished Tauri 2 desktop workspace with Bun, React, Vite, TypeScript, and Rust.",
   "type": "module",
   "bin": {
     "create-tauri-workspace": "./bin/create-tauri-workspace.mjs"

@@ -23,7 +23,8 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; connect-src ipc: http://ipc.localhost",
+      "devCsp": null
     }
   },
   "bundle": {
@@ -38,7 +39,6 @@
     ],
     "resources": {
       "../../resources/defaults/": "defaults/",
-      "../../resources/locales/": "locales/",
       "../../resources/licenses/": "licenses/"
     },
     "windows": {

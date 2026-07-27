@@ -13,11 +13,12 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: npm publish --workspace packages/create-tauri-workspace --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          package-manager-cache: false
+      - run: npm test --workspace packages/create-tauri-workspace
+      - run: npm pack --workspace packages/create-tauri-workspace --dry-run
+      - run: npm publish --workspace packages/create-tauri-workspace --access public

@@ -1,78 +1,83 @@
 # Publishing
 
-## 1. Verify the package
+## Verify the package
 
 From the repository root:
 
-`bash
+```bash
 bun install
 bun run check
 npm pack --workspace packages/create-tauri-workspace
-`
+```
 
-Test the resulting tarball before publishing:
+Test the resulting tarball:
 
-`bash
+```bash
 npm exec --yes \
   --package ./create-tauri-workspace-0.1.0.tgz \
   -- create-tauri-workspace smoke-app --no-install --no-git
-`
+```
 
-## 2. Publish the GitHub repository
+## Publish the GitHub repository
 
-`bash
-git init
-git add .
-git commit -m "feat: initialize create-tauri-workspace"
-git branch -M main
+```bash
 gh repo create erchoc/create-tauri-workspace \
   --public \
   --source . \
   --remote origin \
   --push
-`
+```
 
-To enable GitHub's **Use this template** button, open the repository settings
-and enable **Template repository**. The npm CLI is still the recommended path
-because it replaces the application name automatically.
+Enable **Template repository** under **Settings → General** if you also want
+GitHub's **Use this template** button. The npm CLI remains the recommended path
+because it replaces the application name.
 
-## 3. Log in to npm
+## Log in to npm
 
-`bash
+```bash
 npm login
 npm whoami
-`
+```
 
-`npm login` opens a browser for current npm authentication flows. Complete
-the account and two-factor-authentication steps there, then confirm that
-`npm whoami` prints your npm username.
+The current npm login flow opens a browser. Complete authentication and any
+two-factor challenge, then confirm that `npm whoami` prints your username.
 
-## 4. Publish the npm package
+## Publish to npm
 
-The first release is:
-
-`bash
+```bash
 npm publish --workspace packages/create-tauri-workspace --access public
-`
+```
 
-Verify the public registry and execute a real generation:
+Verify the public package:
 
-`bash
+```bash
 npm view create-tauri-workspace
 npx create-tauri-workspace published-smoke-app --no-install --no-git
-`
+```
 
 For later releases, update the package version first:
 
-`bash
+```bash
 npm version patch --workspace packages/create-tauri-workspace
 npm publish --workspace packages/create-tauri-workspace --access public
-`
+```
 
 Use `minor` or `major` instead of `patch` when the change warrants it.
 
-## Optional automated publishing
+## Enable token-free automated publishing
 
-The included `publish-npm.yml` workflow publishes when a GitHub Release is
-published. Configure npm trusted publishing for the repository, or add an
-`NPM_TOKEN` repository secret if your npm policy still uses tokens.
+After the first version exists on npm, configure this repository as its trusted
+publisher. With npm 11.5.1 or newer, you can run:
+
+```bash
+npm trust github create-tauri-workspace \
+  --repo erchoc/create-tauri-workspace \
+  --file publish-npm.yml \
+  --allow-publish \
+  --yes
+```
+
+You can also configure the same values on the npm package settings page. The
+included `publish-npm.yml` workflow then publishes from a GitHub Release through
+short-lived OIDC credentials. No `NPM_TOKEN` repository secret is required, and
+npm adds provenance automatically for this public repository.

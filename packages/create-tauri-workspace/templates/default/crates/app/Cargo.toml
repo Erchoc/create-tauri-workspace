@@ -17,10 +17,5 @@ path = "src/main.rs"
 tauri-build.workspace = true
 
 [dependencies]
-serde.workspace = true
 tauri.workspace = true
-app-common = { path = "../common" }
 app-core = { path = "../core" }
-app-platform = { path = "../platform" }
-app-storage = { path = "../storage" }
-app-updater = { path = "../updater" }

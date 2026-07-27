@@ -19,6 +19,15 @@ const templateRoot = join(packageRoot, "templates", "default");
 const packageJson = JSON.parse(
   readFileSync(join(packageRoot, "package.json"), "utf8"),
 );
+const colorEnabled = Boolean(process.stdout.isTTY && !process.env.NO_COLOR);
+
+const ansi = {
+  bold: (value) => style(value, "1"),
+  dim: (value) => style(value, "2"),
+  cyan: (value) => style(value, "36"),
+  green: (value) => style(value, "32"),
+  yellow: (value) => style(value, "33"),
+};
 
 const textExtensions = new Set([
   "",
@@ -38,6 +47,20 @@ const textExtensions = new Set([
   ".yml",
   ".yaml",
 ]);
+
+function style(value, code) {
+  return colorEnabled
+    ? "\u001B[" + code + "m" + value + "\u001B[0m"
+    : value;
+}
+
+function printStep(label, detail) {
+  console.log(ansi.green("  ✓") + " " + label + ansi.dim("  " + detail));
+}
+
+function printWarning(message) {
+  console.log(ansi.yellow("  !") + " " + message);
+}
 
 export function normalizeProjectName(input) {
   const slug = input
@@ -111,10 +134,13 @@ export function parseArguments(argv) {
 function printHelp() {
   console.log(
     [
-      "Create Tauri Workspace",
+      ansi.bold("create-tauri-workspace") +
+        " " +
+        ansi.dim("v" + packageJson.version),
+      "Create an opinionated Tauri 2 desktop workspace.",
       "",
       "Usage:",
-      "  create-tauri-workspace [project-name] [options]",
+      "  " + ansi.cyan("create-tauri-workspace") + " [project-name] [options]",
       "",
       "Options:",
       "  --output <directory>  Parent directory for the project",
@@ -122,6 +148,10 @@ function printHelp() {
       "  --no-git              Skip git init",
       "  -h, --help            Show this help",
       "  -v, --version         Show the CLI version",
+      "",
+      "Examples:",
+      "  npx create-tauri-workspace my-app",
+      "  bunx create-tauri-workspace my-app --no-git",
     ].join("\n"),
   );
 }
@@ -209,6 +239,9 @@ export async function createWorkspace(options) {
   }
 
   mkdirSync(options.output, { recursive: true });
+  console.log(
+    "\n" + ansi.cyan("◆") + " Creating " + ansi.bold(displayName) + "\n",
+  );
   cpSync(templateRoot, destination, { recursive: true });
   restoreDotfiles(destination);
 
@@ -218,21 +251,27 @@ export async function createWorkspace(options) {
     "__PROJECT_RUST_LIB__": slug.replaceAll("-", "_") + "_lib",
     "__PROJECT_SLUG__": slug,
   });
+  printStep("Template copied", destination);
 
   let installed = false;
   if (options.install && commandExists("bun")) {
-    console.log("\nInstalling dependencies with Bun...");
+    console.log("\nInstalling dependencies with Bun...\n");
     run("bun", ["install"], destination);
     installed = true;
+    printStep("Dependencies installed", "Bun");
+  } else if (options.install) {
+    printWarning("Bun was not found; dependency installation was skipped.");
   }
 
   if (options.git && commandExists("git")) {
-    console.log("\nInitializing Git...");
-    run("git", ["init"], destination);
+    run("git", ["init", "-b", "main"], destination);
+    printStep("Git initialized", "main");
+  } else if (options.git) {
+    printWarning("Git was not found; repository initialization was skipped.");
   }
 
-  console.log("\nCreated " + displayName + " at " + destination);
-  console.log("\nNext steps:");
+  console.log("\n" + ansi.green("Done.") + " " + displayName + " is ready.");
+  console.log("\nNext steps:\n");
   console.log("  cd " + JSON.stringify(destination));
   if (!installed) {
     console.log("  bun install");

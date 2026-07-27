@@ -7,7 +7,6 @@ type AppInfo = {
   platform: string;
   architecture: string;
   configPath: string;
-  updateChannel: string;
 };
 
 const fallbackInfo: AppInfo = {
@@ -16,7 +15,6 @@ const fallbackInfo: AppInfo = {
   platform: "browser",
   architecture: "development",
   configPath: "Available in the Tauri window",
-  updateChannel: "stable",
 };
 
 export default function App() {
@@ -87,10 +85,6 @@ export default function App() {
             <div>
               <dt>Architecture</dt>
               <dd>{info.architecture}</dd>
-            </div>
-            <div>
-              <dt>Updates</dt>
-              <dd>{info.updateChannel}</dd>
             </div>
           </dl>
         </article>

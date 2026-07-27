@@ -1,18 +1,29 @@
 # create-tauri-workspace
 
-Create a production-oriented Tauri 2 workspace:
+A zero-dependency CLI that creates an opinionated Tauri 2 desktop workspace
+with Bun, React, Vite, TypeScript, and Rust.
 
-`bash
-npx create-tauri-workspace my-app
-# or
-bunx create-tauri-workspace my-app
-`
+![Generated desktop application](https://raw.githubusercontent.com/erchoc/create-tauri-workspace/main/docs/assets/preview.png)
 
-The CLI has zero runtime dependencies. It bundles the template locally, so
-project generation does not depend on cloning a GitHub repository.
+## Create an app
 
-Generated projects use Bun, React, Vite, TypeScript, Tauri 2, and a Rust
-workspace. Run `bun run dev` after generation to start the desktop app.
+```bash
+npx create-tauri-workspace my-desktop-app
+cd my-desktop-app
+bun run dev
+```
 
-See the full documentation at
-https://github.com/erchoc/create-tauri-workspace.
+Or use Bun:
+
+```bash
+bunx create-tauri-workspace my-desktop-app
+```
+
+The generated project includes a two-crate Rust workspace, responsive React
+starter UI, native resources, installer customization, platform build scripts,
+and cross-platform GitHub Actions.
+
+The CLI uses only Node.js built-in modules and bundles its template locally, so
+it does not clone a remote repository during generation.
+
+Documentation: https://github.com/erchoc/create-tauri-workspace
