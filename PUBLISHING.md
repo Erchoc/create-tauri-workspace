@@ -59,7 +59,18 @@ automatically.
 ## Publish to npm
 
 ```bash
-npm publish --workspace packages/create-tauri-workspace --access public
+npm run publish
+```
+
+The script requires a clean `main` branch synchronized with `origin/main`, runs
+the test and package checks, verifies npm authentication and account 2FA, and
+ensures the version is not already present in the registry. It publishes only
+when you press Enter at the final confirmation prompt. Any other input cancels.
+
+To exercise the same flow without uploading a package:
+
+```bash
+npm run publish -- --dry-run
 ```
 
 Verify the public package:
@@ -73,7 +84,7 @@ For later releases, update the package version first:
 
 ```bash
 npm version patch --workspace packages/create-tauri-workspace
-npm publish --workspace packages/create-tauri-workspace --access public
+npm run publish
 ```
 
 Use `minor` or `major` instead of `patch` when the change warrants it.

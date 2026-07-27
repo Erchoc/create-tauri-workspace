@@ -16,6 +16,7 @@ This repository publishes `create-tauri-workspace`, a zero-runtime-dependency CL
 - `bun run test` runs the CLI test suite.
 - `bun run check` runs tests and verifies the npm package contents.
 - `npm pack --workspace packages/create-tauri-workspace --dry-run` previews the published package.
+- `npm run publish` performs guarded checks and interactively publishes the npm package.
 
 After changing the template, generate a fresh application and run `bun run check` inside it.
 

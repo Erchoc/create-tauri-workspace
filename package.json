@@ -10,6 +10,7 @@
     "check": "bun run test && bun run pack:dry",
     "test": "node --test packages/create-tauri-workspace/test/*.test.mjs",
     "pack": "npm pack --workspace packages/create-tauri-workspace",
-    "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run"
+    "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run",
+    "publish": "node scripts/publish.mjs"
   }
 }
