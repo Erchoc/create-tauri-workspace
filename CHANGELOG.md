@@ -57,6 +57,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Moved the screenshots into `site/`, so the page and the READMEs share one
   copy instead of two.
 - Renamed the Pages workflow to `publish-site.yml`, matching `publish-npm.yml`.
+- Moved every workflow from `ubuntu-22.04` to `ubuntu-24.04`. The 22.04 runner
+  image begins deprecation on 2026-09-17 with brownouts that fail jobs, and the
+  label was also baked into every generated project. A test now requires the
+  template and this repository to pin the same image.
+- Updated the Linux build dependencies to the set Tauri currently documents:
+  `libayatana-appindicator3-dev` replaces `libappindicator3-dev`, and
+  `libxdo-dev` and `libssl-dev` were missing. Verified by a release build.
 - Replaced the stale repository-creation section of `PUBLISHING.md` with the
   one-time settings that are not in version control, and documented what losing
   an npm 2FA device costs.

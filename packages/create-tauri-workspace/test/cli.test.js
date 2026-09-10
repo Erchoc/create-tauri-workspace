@@ -317,3 +317,30 @@ test("pins CI toolchains that satisfy the declared floors", () => {
     }
   }
 });
+
+test("builds generated projects on the same Linux image as this repository", () => {
+  const root = dirname(fileURLToPath(import.meta.url));
+  const templateWorkflows = join(root, "..", "templates", "default", ".github", "workflows");
+  const repositoryWorkflow = readFileSync(
+    join(root, "..", "..", "..", ".github", "workflows", "ci.yml"),
+    "utf8",
+  );
+
+  const used = (contents) =>
+    new Set([...contents.matchAll(/ubuntu-[\d.]+/g)].map((match) => match[0]));
+
+  const expected = used(repositoryWorkflow);
+  assert.ok(expected.size > 0, "the repository workflow must pin an Ubuntu image");
+
+  // Runner images are retired on a schedule. Pinning the same image in both
+  // places means bumping one forces the other, instead of leaving generated
+  // projects on an image that has started failing.
+  for (const workflow of ["ci.yml", "release.yml"]) {
+    for (const image of used(readFileSync(join(templateWorkflows, workflow), "utf8"))) {
+      assert.ok(
+        expected.has(image),
+        `template ${workflow} pins ${image}, which this repository does not use`,
+      );
+    }
+  }
+});

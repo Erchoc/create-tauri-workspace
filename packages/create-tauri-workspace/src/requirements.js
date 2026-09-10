@@ -108,7 +108,7 @@ function platformPrerequisite() {
       found: found ? "webkit2gtk-4.1" : undefined,
       reason: "provides the webview the desktop window renders into.",
       remedy: [
-        "sudo apt-get install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf",
+        "sudo apt-get install libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf",
         "See https://v2.tauri.app/start/prerequisites/ for other distributions.",
       ],
     };
