@@ -16,7 +16,7 @@ that Claude Code and Codex use to drive it.
 - `packages/create-tauri-workspace/templates/default/` is the generated application.
 - `packages/create-tauri-workspace/skills/desktop-app/` is the skill, and also the Claude Code plugin source.
 - `.claude-plugin/marketplace.json` publishes that skill as a plugin.
-- `site/` is the documentation page deployed to GitHub Pages, and holds the screenshots the READMEs link to.
+- `site/` is the documentation page deployed to GitHub Pages, and holds the screenshots the READMEs link to. `site/index.html` is English and `site/zh/index.html` is its translation.
 - `work/` is ignored scratch space for generated smoke-test projects.
 
 ## Commands
@@ -25,6 +25,8 @@ that Claude Code and Codex use to drive it.
 - `bun run test` runs the CLI test suite.
 - `bun run check` runs tests and verifies the npm package contents.
 - `bun run verify:package` asserts the tarball's file list, size, and contents.
+- `bun run verify:site` asserts both site pages share the same sections, link to
+  each other, and reference no missing files.
 - `bun run skill:install` installs the skill into this checkout for dogfooding.
 - `npm run publish` performs guarded checks and interactively publishes the npm package.
 
@@ -33,8 +35,10 @@ inside it. CI does the same on every push.
 
 ## Project Rules
 
-- Keep all source code, comments, CLI output, and documentation in English. The
-  translated `README.zh-CN.md` is the one exception, and it tracks `README.md`.
+- Keep all source code, comments, CLI output, and documentation in English.
+  Translations are the exception: `README.zh-CN.md` tracks `README.md`, and
+  `site/zh/index.html` tracks `site/index.html`. Change the English source
+  first, then the translation in the same commit.
 - Keep JavaScript files on the `.js` extension. Both manifests declare
   `"type": "module"`, so plain `.js` is already ESM.
 - Declare the required Bun, Node.js, and Rust versions in
@@ -46,5 +50,8 @@ inside it. CI does the same on every push.
 - Preserve every `__PROJECT_*__` placeholder unless the generator intentionally replaces it.
 - Never run a build inside `templates/default/`. Generated `target/`, `node_modules/`, and `Cargo.lock` must not reach the published package; `bun run verify:package` fails if they do.
 - Keep the skill in one place. It is copied to `.claude/skills/` and `.agents/skills/` at install time, never duplicated in the repository.
+- Never point Dependabot at `templates/default`. Its manifests are placeholders,
+  and an install there would rewrite `bun.lock` with resolved names and destroy
+  them. `.github/dependabot.yml` records this.
 - Do not commit generated projects, build output, signing credentials, or publishing tokens.
 - Validate UI changes at desktop and narrow viewport sizes, with no horizontal overflow, in both light and dark themes.

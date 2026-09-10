@@ -1,0 +1,33 @@
+version: 2
+
+updates:
+  # This repository's own workflows. Pinned action versions go stale quietly,
+  # and a stale action is the most common reason CI breaks without a code
+  # change.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # The generator itself has no runtime dependencies, so this only tracks the
+  # workspace tooling.
+  - package-ecosystem: "bun"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+
+# Deliberately NOT configured for packages/create-tauri-workspace/templates/default.
+#
+# That directory is a template, not an installable project: its package.json is
+# named "__PROJECT_SLUG__" and its bun.lock records workspace names built from
+# the same placeholder. Dependabot would run an install there, rewrite the
+# lockfile with resolved names, and destroy the placeholders the generator
+# depends on. Bump the template's dependencies by hand, then regenerate its
+# lockfile as CONTRIBUTING.md describes.

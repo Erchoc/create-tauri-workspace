@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Runtime dependencies: 0](https://img.shields.io/badge/runtime_dependencies-0-2ea44f.svg)](./packages/create-tauri-workspace/package.json)
 
-[English](./README.md) · 简体中文
+[English](./README.md) · 简体中文 · [说明网站](https://erchoc.github.io/create-tauri-workspace/zh/)
 
 一条命令生成 macOS 与 Windows 桌面应用，自带签名自动更新、设计 token 体系和发布流水线。
 
@@ -91,7 +91,7 @@ packages/create-tauri-workspace/
 ├── src/                  CLI 模块
 ├── skills/desktop-app/   技能本体，同时作为 Claude Code 插件源
 └── templates/default/    被生成出来的应用模板
-site/                     说明网站，发布到 GitHub Pages
+site/                     说明网站（中英双语），发布到 GitHub Pages
 scripts/                  打包校验与发布辅助脚本
 ```
 

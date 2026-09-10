@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Runtime dependencies: 0](https://img.shields.io/badge/runtime_dependencies-0-2ea44f.svg)](./packages/create-tauri-workspace/package.json)
 
-English · [简体中文](./README.zh-CN.md)
+English · [简体中文](./README.zh-CN.md) · [Documentation site](https://erchoc.github.io/create-tauri-workspace/)
 
 Scaffold a macOS and Windows desktop app with signed automatic updates, a
 design token system, and release workflows already wired together.
@@ -96,7 +96,7 @@ packages/create-tauri-workspace/
 ├── src/                  CLI modules
 ├── skills/desktop-app/   The skill, and the Claude Code plugin source
 └── templates/default/    The application that gets generated
-site/                     Documentation page, published to GitHub Pages
+site/                     Documentation pages (en + zh), published to GitHub Pages
 scripts/                  Package verification and release helpers
 ```
 

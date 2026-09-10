@@ -26,9 +26,12 @@
   --radius-pill: 999px;
 
   /* Type scale. */
+  /* CJK families follow the Latin ones so Chinese text picks a real face
+     instead of whatever the system falls back to. */
   --font-sans:
     Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Noto Sans", sans-serif;
+    "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
   --font-mono:
     ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --text-xs: 0.72rem;

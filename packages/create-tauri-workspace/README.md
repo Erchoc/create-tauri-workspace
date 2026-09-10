@@ -1,29 +1,67 @@
 # create-tauri-workspace
 
-A zero-dependency CLI that creates an opinionated Tauri 2 desktop workspace
-with Bun, React, Vite, TypeScript, and Rust.
+Scaffold a macOS and Windows desktop app with signed automatic updates, a
+design token system, and release workflows already wired together.
 
-![Generated desktop application](https://raw.githubusercontent.com/erchoc/create-tauri-workspace/main/docs/assets/preview.png)
+![The generated application in light and dark themes](https://raw.githubusercontent.com/erchoc/create-tauri-workspace/main/site/preview.png)
 
 ## Create an app
 
 ```bash
-npx create-tauri-workspace my-desktop-app
-cd my-desktop-app
+npx create-tauri-workspace my-app --identifier dev.you.myapp --repo you/my-app
+cd my-app
 bun run dev
 ```
 
-Or use Bun:
+Only the name is required. Check the machine first with:
 
 ```bash
-bunx create-tauri-workspace my-desktop-app
+npx create-tauri-workspace doctor
 ```
 
-The generated project includes a two-crate Rust workspace, responsive React
-starter UI, native resources, installer customization, platform build scripts,
-and cross-platform GitHub Actions.
+## What you get
 
-The CLI uses only Node.js built-in modules and bundles its template locally, so
-it does not clone a remote repository during generation.
+- **Signed automatic updates**, off until `bun run updater:init` creates a key.
+  Without one the updater is never registered, so the app cannot offer an
+  install it cannot verify.
+- **Design tokens** with light and dark themes and a theme control in the
+  window.
+- **Two Rust crates with a real boundary.** `crates/core` is testable and never
+  depends on Tauri; `crates/app` adapts it to the desktop shell.
+- **Desktop basics**: single-instance launch, restored window position,
+  structured logs, persisted settings, an error boundary.
+- **Release workflows** that check the tag, the version, and the signing secret
+  before any platform builds, then publish a draft release.
 
-Documentation: https://github.com/erchoc/create-tauri-workspace
+## Install the skill
+
+Claude Code and Codex read the same `SKILL.md` from different directories, and
+this installs it for both:
+
+```bash
+npx create-tauri-workspace skill install            # this project
+npx create-tauri-workspace skill install --global   # every project
+```
+
+## Requirements
+
+| Tool | Minimum |
+| --- | --- |
+| [Bun](https://bun.sh/) | 1.4 |
+| [Node.js](https://nodejs.org/) | 24 |
+| [Rust](https://rustup.rs/) | 1.98 |
+
+Plus the [Tauri platform prerequisites](https://v2.tauri.app/start/prerequisites/).
+These bind you, not your users: what you ship is a native binary with no
+JavaScript runtime inside it.
+
+The CLI itself has no runtime dependencies and bundles its template locally, so
+generation never clones a remote repository.
+
+## Links
+
+- Documentation: <https://erchoc.github.io/create-tauri-workspace/>
+- 简体中文: <https://erchoc.github.io/create-tauri-workspace/zh/>
+- Source: <https://github.com/erchoc/create-tauri-workspace>
+
+MIT licensed.

@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>create-tauri-workspace — 跨平台桌面应用脚手架</title>
+    <meta
+      name="description"
+      content="一条命令生成 macOS 与 Windows 桌面应用，自带签名自动更新、设计 token 体系和跨平台发布流水线。"
+    />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://erchoc.github.io/create-tauri-workspace/zh/" />
+    <link rel="alternate" hreflang="en" href="https://erchoc.github.io/create-tauri-workspace/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://erchoc.github.io/create-tauri-workspace/zh/" />
+    <meta name="theme-color" content="#6338f5" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="create-tauri-workspace" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en" />
+    <meta property="og:url" content="https://erchoc.github.io/create-tauri-workspace/zh/" />
+    <meta property="og:title" content="一条命令，做出能自动更新的 macOS 和 Windows 应用" />
+    <meta
+      property="og:description"
+      content="Tauri 2 工作区，签名自动更新、设计 token 体系、跨平台发布流水线都已接好。"
+    />
+    <meta property="og:image" content="https://erchoc.github.io/create-tauri-workspace/preview.png" />
+    <meta property="og:image:width" content="2200" />
+    <meta property="og:image:height" content="781" />
+    <meta property="og:image:alt" content="生成的桌面应用，亮色与暗色主题。" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <span class="brand">
+          <span class="brand-mark" aria-hidden="true">CT</span>
+          create-tauri-workspace
+        </span>
+        <nav class="site" aria-label="章节">
+          <a href="#start">快速开始</a>
+          <a href="#skill">技能</a>
+          <a href="#signing">签名</a>
+          <a href="#faq">常见问题</a>
+          <a href="https://github.com/erchoc/create-tauri-workspace">GitHub</a>
+          <a class="lang" href="../" hreflang="en" lang="en">English</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero stack">
+          <span class="eyebrow">一条命令，一个桌面应用</span>
+          <h1>做出能自动更新的 macOS 和 Windows 应用。</h1>
+          <p class="lede">
+            一个 Tauri 2 工作区：React 负责界面，底下是职责清晰的两个 Rust
+            crate，签名自动更新和跨平台发布流水线都已经接好。
+          </p>
+          <pre><span class="prompt">$</span> npx create-tauri-workspace my-app --identifier dev.you.myapp --repo you/my-app</pre>
+          <div class="cta-row">
+            <a class="button" href="#start">开始使用</a>
+            <a
+              class="button"
+              data-variant="secondary"
+              href="https://github.com/erchoc/create-tauri-workspace"
+              >查看源码</a
+            >
+          </div>
+          <p class="muted">
+            生成器零运行时依赖。你交付的应用里也不含任何 JavaScript 运行时。
+          </p>
+          <img
+            class="shot"
+            src="../preview.png"
+            width="2200"
+            height="781"
+            alt="生成的应用，亮色与暗色主题，展示 Rust 命令调用示例、运行时信息与配置文件路径。"
+            loading="lazy"
+          />
+        </section>
+
+        <section class="stack-lg stack" id="features">
+          <div class="stack">
+            <span class="eyebrow">包含什么</span>
+            <h2>那些自己接起来最麻烦的部分</h2>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>签名自动更新</h3>
+              <p>
+                一条命令生成签名密钥、把公钥写进配置、并打印出要上传的 secret。
+                更新清单托管在 GitHub Releases 上，不需要你运维任何服务器。
+              </p>
+            </article>
+            <article class="card">
+              <h3>设计体系，不只是换个皮</h3>
+              <p>
+                每一个颜色、圆角、间距都是 token。亮暗两套都定义好了，窗口里自带
+                主题切换。
+              </p>
+            </article>
+            <article class="card">
+              <h3>两个 Rust crate，边界清晰</h3>
+              <p>
+                <code>crates/core</code> 承载可测试的逻辑，永不依赖 Tauri；
+                <code>crates/app</code> 负责把它接到桌面外壳上。要加新 crate，
+                得先有真正的理由。
+              </p>
+            </article>
+            <article class="card">
+              <h3>会提前失败的发布流水线</h3>
+              <p>
+                预检任务会在任何平台开始构建前先校验 tag、版本号和签名密钥。
+                产物落成草稿 Release，由你确认后再发布。
+              </p>
+            </article>
+            <article class="card">
+              <h3>桌面软件的基本盘</h3>
+              <p>
+                单实例启动、窗口位置记忆、结构化日志、设置持久化，以及错误边界
+                ——渲染出错也不会只剩一个白窗口。
+              </p>
+            </article>
+            <article class="card">
+              <h3>面向 AI 协作</h3>
+              <p>
+                一份 <code>AGENTS.md</code>，由 <code>CLAUDE.md</code> 引入，
+                外加一个 Claude Code 和 Codex 都能读的技能。
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="stack-lg stack" id="start">
+          <div class="stack">
+            <span class="eyebrow">快速开始</span>
+            <h2>从零到一个跑起来的窗口</h2>
+          </div>
+          <ol class="steps">
+            <li>
+              <div class="body">
+                <h3>检查本机环境</h3>
+                <pre><span class="prompt">$</span> npx create-tauri-workspace doctor</pre>
+                <p class="muted">
+                  它会逐项检查下面这些工具和平台 webview，并给出修复每一项的
+                  确切命令。
+                </p>
+                <div class="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>工具</th>
+                        <th>最低版本</th>
+                        <th>用途</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><a href="https://bun.sh/">Bun</a></td>
+                        <td>1.4</td>
+                        <td>运行项目的全部命令</td>
+                      </tr>
+                      <tr>
+                        <td><a href="https://nodejs.org/">Node.js</a></td>
+                        <td>24</td>
+                        <td>运行发布与更新配置脚本</td>
+                      </tr>
+                      <tr>
+                        <td><a href="https://rustup.rs/">Rust</a></td>
+                        <td>1.98</td>
+                        <td>编译桌面应用本体</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="muted">
+                  这些版本约束的是你，不是你的用户：你交付出去的是原生二进制，
+                  里面没有 JavaScript 运行时。
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>生成项目</h3>
+                <pre><span class="prompt">$</span> npx create-tauri-workspace my-app \
+    --identifier dev.you.myapp \
+    --repo you/my-app</pre>
+                <p class="muted">
+                  identifier 要用你自己控制的反向域名。没有域名就用
+                  <code>io.github.你的用户名.my-app</code>。
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>跑起来</h3>
+                <pre><span class="prompt">$</span> cd my-app
+<span class="prompt">$</span> bun run dev</pre>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>打开自动更新</h3>
+                <pre><span class="prompt">$</span> bun run updater:init --repo you/my-app</pre>
+                <p class="muted">
+                  备份好它打印出来的私钥。这是唯一能给已安装的副本推送更新的
+                  东西，丢了就再也补不回来。
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>发布</h3>
+                <pre><span class="prompt">$</span> bun run release:check
+<span class="prompt">$</span> git tag app-v0.1.0 &amp;&amp; git push origin app-v0.1.0</pre>
+                <p class="muted">
+                  macOS、Windows、Linux 并行构建，产物上传到草稿 Release。
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="stack-lg stack" id="skill">
+          <div class="stack">
+            <span class="eyebrow">给 AI 编程工具用</span>
+            <h2>一份技能，Claude Code 和 Codex 都认</h2>
+            <p class="lede">
+              两个工具读的是同一种 <code>SKILL.md</code> 格式，只是目录不同。
+              安装命令会同时写入两处。
+            </p>
+          </div>
+          <pre><span class="prompt">$</span> npx create-tauri-workspace skill install          <span class="prompt"># 仅当前项目</span>
+<span class="prompt">$</span> npx create-tauri-workspace skill install --global <span class="prompt"># 所有项目</span></pre>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>工具</th>
+                  <th>安装位置</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Claude Code</td>
+                  <td><code>.claude/skills/desktop-app/</code></td>
+                </tr>
+                <tr>
+                  <td>Codex</td>
+                  <td><code>.agents/skills/desktop-app/</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="muted">
+            Claude Code 也可以按插件安装：
+            <code>/plugin marketplace add erchoc/create-tauri-workspace</code>
+            然后 <code>/plugin install desktop-app@create-tauri-workspace</code>。
+          </p>
+          <p>
+            装好之后，说一句"帮我做个桌面应用"就够了。技能知道要挑 identifier、
+            要验证构建、要把业务逻辑挡在命令处理器外面、要用设计 token，
+            也知道在某件事需要付费账号时提前告诉你。
+          </p>
+        </section>
+
+        <section class="stack-lg stack" id="signing">
+          <div class="stack">
+            <span class="eyebrow">在你承诺上线时间之前，先读这段</span>
+            <h2>三种签名，只有一种免费</h2>
+            <p class="lede">
+              它们很容易被搞混，而搞混它们是第一次发桌面应用翻车最常见的原因。
+            </p>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>签名</th>
+                  <th>签什么</th>
+                  <th>不做会怎样</th>
+                  <th>成本</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>更新签名</td>
+                  <td>更新包</td>
+                  <td>所有平台都无法自动更新</td>
+                  <td class="tone-free">免费</td>
+                </tr>
+                <tr>
+                  <td>Apple Developer ID</td>
+                  <td><code>.app</code> 与 <code>.dmg</code></td>
+                  <td>macOS 根本打不开</td>
+                  <td class="tone-paid">Apple 开发者计划</td>
+                </tr>
+                <tr>
+                  <td>Windows 代码签名</td>
+                  <td><code>.exe</code> 安装包</td>
+                  <td>SmartScreen 拦截告警</td>
+                  <td class="tone-paid">证书颁发机构</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>什么都不签会怎样</h3>
+              <p>
+                macOS 会告诉每一个下载你应用的人"文件已损坏"，并拒绝打开。
+                Windows 弹出警告，用户可以点掉。Linux 不受影响。
+              </p>
+            </article>
+            <article class="card">
+              <h3>自动更新也需要 macOS 签名</h3>
+              <p>
+                更新会替换整个应用包。在 macOS 上，没签名的替换体启动不起来，
+                所以只有更新签名是不够的。
+              </p>
+            </article>
+            <article class="card">
+              <h3>缺 secret 不会让构建失败</h3>
+              <p>
+                发布流水线会跳过每一个 secret 为空的签名步骤，所以没配置凭据的
+                仓库仍然能产出未签名的构建，而不是直接报错。
+              </p>
+            </article>
+          </div>
+          <p>
+            <a
+              href="https://github.com/erchoc/create-tauri-workspace/blob/main/packages/create-tauri-workspace/templates/default/docs/distribution.md"
+              >完整的分发指南</a
+            >
+            列出了每一个 secret 以及去哪里获取。
+          </p>
+        </section>
+
+        <section class="stack-lg stack" id="faq">
+          <div class="stack">
+            <span class="eyebrow">常见问题</span>
+            <h2>老实的回答</h2>
+          </div>
+          <dl class="faq">
+            <div>
+              <dt>构建 macOS 应用一定要有 Mac 吗？</dt>
+              <dd>
+                本地构建需要。但内置的发布流水线用的是 GitHub 的 macOS runner，
+                所以你不用拥有 Mac 也能发布 macOS 构建——只是签名和公证仍然需要
+                Apple 开发者账号。
+              </dd>
+            </div>
+            <div>
+              <dt>和官方的 Tauri 脚手架有什么区别？</dt>
+              <dd>
+                <code>create-tauri-app</code> 让你自由选择技术栈的每一部分，
+                到此为止。这个项目替你把选择做完了，并补上了你本来要手写的部分：
+                crate 边界、签名更新、设计 token 体系、发布预检，以及给 AI
+                工具的规范。
+              </dd>
+            </div>
+            <div>
+              <dt>应用里会带 Node.js 或 Bun 吗？</dt>
+              <dd>
+                不会。Bun 只是开发工具。生产构建会把编译好的静态前端嵌进一个
+                Rust 二进制里。
+              </dd>
+            </div>
+            <div>
+              <dt>可以不用自动更新吗？</dt>
+              <dd>
+                可以。在你运行 <code>bun run updater:init</code> 之前，更新是
+                关着的。没有签名密钥时更新插件根本不会注册，界面会隐藏更新入口，
+                而不是提供一个自己无法校验的安装包。
+              </dd>
+            </div>
+            <div>
+              <dt>更新签名的私钥丢了会怎样？</dt>
+              <dd>
+                所有已安装的副本都将无法再接收更新，这些用户只能手动重新下载
+                安装包。所以在配置命令打印出私钥位置时，立刻备份它。
+              </dd>
+            </div>
+            <div>
+              <dt>支持 Linux 吗？</dt>
+              <dd>
+                支持——CI 会构建 AppImage 和 Debian 包。macOS 和 Windows 是主要
+                目标，Linux 是顺带的。
+              </dd>
+            </div>
+          </dl>
+        </section>
+      </main>
+
+      <footer class="site">
+        <p>
+          MIT 许可 ·
+          <a href="https://github.com/erchoc/create-tauri-workspace">GitHub</a> ·
+          <a href="https://www.npmjs.com/package/create-tauri-workspace">npm</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
