@@ -27,12 +27,27 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - `bun run verify:package`, which asserts the published tarball's contents, and
   a CI job that generates a project and runs its checks.
 - A `bun.lock` in the template, so `bun install --frozen-lockfile` is meaningful.
+- `create-tauri-workspace doctor` and `bun run doctor`, which report whether a
+  machine has the Bun, Node.js, Rust, and platform prerequisites this project
+  needs, and print the exact command to fix anything missing. Generation runs
+  the same check and warns without blocking.
+- A Simplified Chinese translation of the README.
 
 ### Changed
 
 - `bun run check` in the generated project now also runs `cargo test`.
 - The generated `docs/` gained `design.md` and a rewritten `distribution.md`
   covering update signing, Apple notarization, and Windows code signing.
+- Split the single 484-line CLI file into one module per concern, matching the
+  layout of comparable project generators.
+- Renamed every `.mjs` file to `.js`, and declared `"type": "module"` in both
+  manifests.
+- Raised the required toolchain to Bun 1.4, Node.js 24, and Rust 1.98. The
+  floors are declared once and a test fails if the CLI and the template drift
+  apart. They bind contributors only; a shipped application contains no
+  JavaScript runtime.
+- Moved the screenshots into `site/`, so the page and the READMEs share one
+  copy instead of two.
 
 ## [0.1.0] - 2026-07-27
 

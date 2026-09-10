@@ -9,8 +9,9 @@ import {
   statSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   assertIdentifier,
   assertRepository,
@@ -20,8 +21,11 @@ import {
   normalizeProjectName,
   parseArguments,
   parseSkillArguments,
+  inspectEnvironment,
   updateEndpoint,
-} from "../src/cli.mjs";
+  TOOLCHAIN,
+} from "../src/index.js";
+import { parseVersion, satisfies } from "../src/versions.js";
 
 function allFiles(directory) {
   return readdirSync(directory).flatMap((entry) => {
@@ -237,5 +241,51 @@ test("installs the skill where Claude Code and Codex look for it", () => {
     );
   } finally {
     rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test("keeps the toolchain floors in step with the template", () => {
+  const templateRoot = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "templates",
+    "default",
+  );
+  const manifest = JSON.parse(
+    readFileSync(join(templateRoot, "package.json"), "utf8"),
+  );
+  const cargo = readFileSync(join(templateRoot, "Cargo.toml"), "utf8");
+  const rustVersion = /rust-version = "([^"]+)"/.exec(cargo)?.[1];
+
+  // The generated project declares its own floors so it can stand alone.
+  // Those declarations and the CLI's must not drift apart.
+  assert.deepEqual(parseVersion(manifest.engines.bun), parseVersion(TOOLCHAIN.bun));
+  assert.deepEqual(parseVersion(manifest.engines.node), parseVersion(TOOLCHAIN.node));
+  assert.deepEqual(parseVersion(rustVersion), parseVersion(TOOLCHAIN.rust));
+});
+
+test("compares toolchain versions the way the doctor needs", () => {
+  assert.equal(satisfies("rustc 1.98.1 (48a229cea)", "1.98.0"), true);
+  assert.equal(satisfies("rustc 1.94.1", "1.98.0"), false);
+  assert.equal(satisfies("v24.0.0", "24.0.0"), true);
+  assert.equal(satisfies("v22.22.2", "24.0.0"), false);
+  assert.equal(satisfies("1.4.2", "1.4.0"), true);
+  assert.equal(satisfies("not a version", "1.0.0"), false);
+});
+
+test("reports every required tool with a remedy", () => {
+  const checks = inspectEnvironment();
+  const required = checks.filter((check) => !check.optional);
+  assert.ok(required.length >= 3);
+
+  for (const check of checks) {
+    assert.equal(typeof check.label, "string");
+    if (!check.ok) {
+      assert.ok(check.problem, `${check.label} must explain the problem`);
+      assert.ok(
+        (check.remedy ?? []).length > 0,
+        `${check.label} must suggest a fix`,
+      );
+    }
   }
 });

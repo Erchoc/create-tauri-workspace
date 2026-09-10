@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-import { main } from "../src/cli.mjs";
+import process from "node:process";
+
+import { main } from "../src/index.js";
 
 main().catch((error) => {
   console.error();
