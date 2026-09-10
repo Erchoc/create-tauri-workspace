@@ -289,3 +289,31 @@ test("reports every required tool with a remedy", () => {
     }
   }
 });
+
+test("pins CI toolchains that satisfy the declared floors", () => {
+  const templateRoot = join(
+    dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "templates",
+    "default",
+  );
+
+  // A workflow that pins an older Bun than the project requires would fail
+  // every generated project's first CI run.
+  for (const workflow of ["ci.yml", "release.yml"]) {
+    const contents = readFileSync(
+      join(templateRoot, ".github", "workflows", workflow),
+      "utf8",
+    );
+    const pins = [...contents.matchAll(/bun-version:\s*([\d.]+)/g)].map(
+      (match) => match[1],
+    );
+    assert.ok(pins.length > 0, `${workflow} must pin a Bun version`);
+    for (const pin of pins) {
+      assert.ok(
+        satisfies(pin, TOOLCHAIN.bun),
+        `${workflow} pins Bun ${pin}, below the required ${TOOLCHAIN.bun}`,
+      );
+    }
+  }
+});

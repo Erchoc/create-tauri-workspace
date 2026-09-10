@@ -32,6 +32,14 @@ and this project follows [Semantic Versioning](https://semver.org/).
   needs, and print the exact command to fix anything missing. Generation runs
   the same check and warns without blocking.
 - A Simplified Chinese translation of the README.
+- A Simplified Chinese version of the documentation site, with a language
+  switcher, plus social card metadata, canonical URLs, `robots.txt`, and a
+  sitemap.
+- `bun run verify:site`, which asserts both site pages share the same sections,
+  link to each other, and reference no missing files.
+- A Dependabot configuration for this repository's workflows and tooling. It
+  deliberately excludes the template, whose manifests are placeholders an
+  install would overwrite.
 
 ### Changed
 
@@ -48,6 +56,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
   JavaScript runtime.
 - Moved the screenshots into `site/`, so the page and the READMEs share one
   copy instead of two.
+- Renamed the Pages workflow to `publish-site.yml`, matching `publish-npm.yml`.
+- Replaced the stale repository-creation section of `PUBLISHING.md` with the
+  one-time settings that are not in version control, and documented what losing
+  an npm 2FA device costs.
 
 ## [0.1.0] - 2026-07-27
 

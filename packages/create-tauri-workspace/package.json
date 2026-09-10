@@ -42,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/erchoc/create-tauri-workspace/issues"
   },
-  "homepage": "https://github.com/erchoc/create-tauri-workspace#readme",
+  "homepage": "https://erchoc.github.io/create-tauri-workspace/",
   "engines": {
     "node": ">=24"
   },

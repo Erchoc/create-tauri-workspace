@@ -22,19 +22,17 @@ npm exec --yes \
   -- create-tauri-workspace smoke-app --no-install --no-git
 ```
 
-## Publish the GitHub repository
+## One-time repository setup
 
-```bash
-gh repo create erchoc/create-tauri-workspace \
-  --public \
-  --source . \
-  --remote origin \
-  --push
-```
+Two settings are not in version control and have to be switched on by hand:
 
-Enable **Template repository** under **Settings → General** if you also want
-GitHub's **Use this template** button. The npm CLI remains the recommended path
-because it replaces the application name.
+1. **GitHub Pages.** Open **Settings → Pages** and set **Source** to
+   **GitHub Actions**. Until that is set, `publish-site.yml` runs and fails at
+   the deploy step. Once enabled, every push to `main` that touches `site/`
+   republishes <https://erchoc.github.io/create-tauri-workspace/>.
+2. **Template repository** under **Settings → General**, only if you also want
+   GitHub's **Use this template** button. The npm CLI remains the recommended
+   path because it substitutes the application name.
 
 ## Log in to npm
 
@@ -55,10 +53,22 @@ release, enable account 2FA instead of creating a long-lived bypass token:
 1. Open your account settings on [npmjs.com](https://www.npmjs.com/).
 2. Under **Two-Factor Authentication**, select **Enable 2FA**.
 3. Register a passkey or security key, such as Touch ID.
-4. Save the recovery codes in a password manager.
+4. **Save the recovery codes in a password manager, not on the machine you
+   registered the passkey on.**
 
 After setup, `npm publish` prompts for the configured second factor
 automatically.
+
+> **Step 4 is the one that bites.** A passkey is bound to the device or browser
+> that created it. Lose that device without the recovery codes and you cannot
+> publish, cannot run `npm owner`, and cannot unpublish — the package name is
+> stuck with an account you can no longer reach. Recovery then means a support
+> ticket and access to the account's registered email address. See
+> [recovering a 2FA-enabled account](https://docs.npmjs.com/recovering-your-2fa-enabled-account).
+>
+> Keep the publishing account's email address one you will still control in
+> five years, and store the recovery codes somewhere that survives losing the
+> laptop.
 
 ## Publish to npm
 
