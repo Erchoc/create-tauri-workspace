@@ -5,5 +5,6 @@ project-owned customizations:
 
 - `windows/nsis/hooks.nsh` extends the NSIS setup without replacing Tauri's
   maintained installer template.
+- `windows/README.md` records WebView2 and code signing configuration.
 - `macos/README.md` records signing and notarization decisions.
 - `linux/README.md` records package-specific metadata.

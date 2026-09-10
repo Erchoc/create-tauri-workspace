@@ -6,6 +6,10 @@
     "main"
   ],
   "permissions": [
-    "core:default"
+    "core:default",
+    "log:default",
+    "opener:allow-open-url",
+    "process:allow-restart",
+    "updater:default"
   ]
 }

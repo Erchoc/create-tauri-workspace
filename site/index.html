@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>create-tauri-workspace — cross-platform desktop apps</title>
+    <meta
+      name="description"
+      content="Generate a Tauri 2 desktop workspace for macOS and Windows with signed automatic updates, a design token system, and release workflows already wired up."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <span class="brand">
+          <span class="brand-mark" aria-hidden="true">CT</span>
+          create-tauri-workspace
+        </span>
+        <nav class="site" aria-label="Sections">
+          <a href="#start">Quick start</a>
+          <a href="#skill">Skill</a>
+          <a href="#signing">Signing</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://github.com/erchoc/create-tauri-workspace">GitHub</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero stack">
+          <span class="eyebrow">One command, one desktop app</span>
+          <h1>Ship a macOS and Windows app, updates included.</h1>
+          <p class="lede">
+            A Tauri 2 workspace with a React frontend, two focused Rust crates,
+            signed automatic updates, a design token system, and cross-platform
+            release workflows — already wired together.
+          </p>
+          <pre><span class="prompt">$</span> npx create-tauri-workspace my-app --identifier dev.you.myapp --repo you/my-app</pre>
+          <div class="cta-row">
+            <a class="button" href="#start">Get started</a>
+            <a
+              class="button"
+              data-variant="secondary"
+              href="https://github.com/erchoc/create-tauri-workspace"
+              >View the source</a
+            >
+          </div>
+          <p class="muted">
+            No runtime dependencies in the generator. No JavaScript runtime in
+            the application you ship.
+          </p>
+          <img
+            class="shot"
+            src="./preview.png"
+            width="2200"
+            height="781"
+            alt="The generated application in light and dark themes, showing a
+            Rust command example, runtime details, and the configuration path."
+            loading="lazy"
+          />
+        </section>
+
+        <section class="stack-lg stack" id="features">
+          <div class="stack">
+            <span class="eyebrow">What you get</span>
+            <h2>The parts that are tedious to wire up yourself</h2>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>Signed automatic updates</h3>
+              <p>
+                One command generates the signing key, writes the public key
+                into the configuration, and prints the secrets to upload.
+                GitHub Releases hosts the manifest, so there is no server.
+              </p>
+            </article>
+            <article class="card">
+              <h3>A design system, not a theme</h3>
+              <p>
+                Every colour, radius and spacing value is a token. Light and
+                dark are both defined, and a theme control ships in the window.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Two Rust crates, one boundary</h3>
+              <p>
+                <code>crates/core</code> holds testable logic and never depends
+                on Tauri. <code>crates/app</code> adapts it to the desktop
+                shell. New crates wait for a real reason.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Release workflows that fail fast</h3>
+              <p>
+                A preflight job checks the tag, the version, and the signing
+                secret before any platform starts building. Releases land as
+                drafts for you to review.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Desktop basics, handled</h3>
+              <p>
+                Single-instance launch, restored window position, structured
+                logs, persisted settings, and an error boundary so a rendering
+                failure never leaves a blank window.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Guidance for coding agents</h3>
+              <p>
+                One <code>AGENTS.md</code>, imported by <code>CLAUDE.md</code>,
+                plus a skill that Claude Code and Codex both read.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="stack-lg stack" id="start">
+          <div class="stack">
+            <span class="eyebrow">Quick start</span>
+            <h2>From nothing to a running window</h2>
+          </div>
+          <ol class="steps">
+            <li>
+              <div class="body">
+                <h3>Install the prerequisites</h3>
+                <p class="muted">
+                  Bun 1.3 or newer, a stable Rust toolchain, and the
+                  <a href="https://v2.tauri.app/start/prerequisites/"
+                    >Tauri platform prerequisites</a
+                  >
+                  for your operating system.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>Generate the project</h3>
+                <pre><span class="prompt">$</span> npx create-tauri-workspace my-app \
+    --identifier dev.you.myapp \
+    --repo you/my-app</pre>
+                <p class="muted">
+                  The identifier is a reverse domain name you control. Without
+                  a domain, use <code>io.github.your-handle.my-app</code>.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>Run it</h3>
+                <pre><span class="prompt">$</span> cd my-app
+<span class="prompt">$</span> bun run dev</pre>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>Turn on automatic updates</h3>
+                <pre><span class="prompt">$</span> bun run updater:init --repo you/my-app</pre>
+                <p class="muted">
+                  Back up the private key it reports. It is the only thing that
+                  can update copies of the app that are already installed.
+                </p>
+              </div>
+            </li>
+            <li>
+              <div class="body">
+                <h3>Release</h3>
+                <pre><span class="prompt">$</span> bun run release:check
+<span class="prompt">$</span> git tag app-v0.1.0 &amp;&amp; git push origin app-v0.1.0</pre>
+                <p class="muted">
+                  macOS, Windows and Linux build in parallel and upload to a
+                  draft release.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section class="stack-lg stack" id="skill">
+          <div class="stack">
+            <span class="eyebrow">For coding agents</span>
+            <h2>One skill, read by Claude Code and Codex</h2>
+            <p class="lede">
+              Both tools read the same <code>SKILL.md</code> format from
+              different directories. The installer writes to both.
+            </p>
+          </div>
+          <pre><span class="prompt">$</span> npx create-tauri-workspace skill install          <span class="prompt"># this project</span>
+<span class="prompt">$</span> npx create-tauri-workspace skill install --global <span class="prompt"># every project</span></pre>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Installed to</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Claude Code</td>
+                  <td><code>.claude/skills/desktop-app/</code></td>
+                </tr>
+                <tr>
+                  <td>Codex</td>
+                  <td><code>.agents/skills/desktop-app/</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="muted">
+            Claude Code can also install it as a plugin:
+            <code>/plugin marketplace add erchoc/create-tauri-workspace</code>
+            then <code>/plugin install desktop-app@create-tauri-workspace</code>.
+          </p>
+          <p>
+            After that, asking for a desktop app is enough. The skill knows to
+            pick an identifier, verify the build, keep logic out of command
+            handlers, use the design tokens, and tell you early when something
+            needs a paid account.
+          </p>
+        </section>
+
+        <section class="stack-lg stack" id="signing">
+          <div class="stack">
+            <span class="eyebrow">Read this before you promise a release date</span>
+            <h2>Three signatures, and only one is free</h2>
+            <p class="lede">
+              They are easy to confuse, and confusing them is the most common
+              way a first desktop release goes wrong.
+            </p>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Signature</th>
+                  <th>Signs</th>
+                  <th>Needed for</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Update signature</td>
+                  <td>The update package</td>
+                  <td>Automatic updates on every platform</td>
+                  <td class="tone-free">Free</td>
+                </tr>
+                <tr>
+                  <td>Apple Developer ID</td>
+                  <td>The <code>.app</code> and <code>.dmg</code></td>
+                  <td>macOS opening the app at all</td>
+                  <td class="tone-paid">Apple Developer Program</td>
+                </tr>
+                <tr>
+                  <td>Windows code signing</td>
+                  <td>The <code>.exe</code> installer</td>
+                  <td>Avoiding a SmartScreen warning</td>
+                  <td class="tone-paid">Certificate authority</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid">
+            <article class="card">
+              <h3>Without any signing</h3>
+              <p>
+                macOS tells anyone who downloads your app that it is damaged and
+                refuses to open it. Windows shows a warning users can click
+                through. Linux is unaffected.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Updates need macOS signing too</h3>
+              <p>
+                An update replaces the application bundle. On macOS an unsigned
+                replacement will not launch, so update signing alone is not
+                enough there.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Missing secrets do not break the build</h3>
+              <p>
+                The release workflow skips each signing step whose secret is
+                empty, so a repository without credentials still produces
+                unsigned builds instead of failing.
+              </p>
+            </article>
+          </div>
+          <p>
+            <a
+              href="https://github.com/erchoc/create-tauri-workspace/blob/main/packages/create-tauri-workspace/templates/default/docs/distribution.md"
+              >The full distribution guide</a
+            >
+            lists every secret and where to get it.
+          </p>
+        </section>
+
+        <section class="stack-lg stack" id="faq">
+          <div class="stack">
+            <span class="eyebrow">FAQ</span>
+            <h2>Honest answers</h2>
+          </div>
+          <dl class="faq">
+            <div>
+              <dt>Do I need a Mac to build the macOS app?</dt>
+              <dd>
+                To build it locally, yes. The included release workflow uses
+                GitHub's macOS runner, so you can publish macOS builds without
+                owning one — but you still need an Apple Developer account to
+                sign and notarize them.
+              </dd>
+            </div>
+            <div>
+              <dt>How is this different from the official Tauri scaffolder?</dt>
+              <dd>
+                <code>create-tauri-app</code> lets you choose every part of the
+                stack and stops there. This one makes those choices and adds the
+                pieces you would otherwise add by hand: the crate boundary,
+                signed updates, a design token system, release preflight, and
+                agent guidance.
+              </dd>
+            </div>
+            <div>
+              <dt>Does the app ship Node.js or Bun?</dt>
+              <dd>
+                No. Bun is a development tool. A production build embeds the
+                compiled static frontend inside a Rust binary.
+              </dd>
+            </div>
+            <div>
+              <dt>Can I still use it without automatic updates?</dt>
+              <dd>
+                Yes. Updates are off until you run
+                <code>bun run updater:init</code>. The updater plugin is not
+                even registered without a signing key, so the interface hides
+                the update controls rather than offering an install it cannot
+                verify.
+              </dd>
+            </div>
+            <div>
+              <dt>What if I lose the update signing key?</dt>
+              <dd>
+                Every installed copy stops accepting updates, and those users
+                have to download a new installer by hand. Back it up when the
+                setup command prints its location.
+              </dd>
+            </div>
+            <div>
+              <dt>Is Linux supported?</dt>
+              <dd>
+                Yes — AppImage and Debian packages build in CI. macOS and
+                Windows are the primary targets, and Linux comes along for free.
+              </dd>
+            </div>
+          </dl>
+        </section>
+      </main>
+
+      <footer class="site">
+        <p>
+          MIT licensed ·
+          <a href="https://github.com/erchoc/create-tauri-workspace">GitHub</a> ·
+          <a href="https://www.npmjs.com/package/create-tauri-workspace">npm</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

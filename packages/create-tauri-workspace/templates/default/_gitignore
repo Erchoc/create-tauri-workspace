@@ -1,7 +1,6 @@
 node_modules/
 dist/
 target/
-bun.lockb
 .DS_Store
 .idea/
 .vscode/
@@ -9,3 +8,9 @@ bun.lockb
 *.pdb
 *.dSYM/
 release/
+
+# Signing material never belongs in the repository.
+*.key
+*.p12
+*.pfx
+.tauri/

@@ -20,9 +20,9 @@ bun run dev
 Useful commands:
 
 ```bash
-bun run frontend:dev
-bun run check
-bun run build
+bun run frontend:dev    # the interface in a browser
+bun run check           # formatting, types, Clippy, Rust tests
+bun run build           # bundles for the current platform
 ```
 
 ## Structure
@@ -30,20 +30,32 @@ bun run build
 ```text
 AGENTS.md         Shared repository guidance for coding agents
 CLAUDE.md         Imports AGENTS.md for Claude Code
-apps/desktop/     React and Vite frontend
-crates/app/       Tauri shell, capabilities, and IPC commands
-crates/core/      Models and framework-independent native logic
+apps/desktop/     React and Vite frontend, design tokens and components
+crates/app/       Tauri shell, commands, capabilities, plugins
+crates/core/      Models, settings storage, framework-independent logic
 resources/        Native resources bundled with the application
-installers/       Installer customization
-scripts/          Build and packaging entry points
-docs/             Architecture and release documentation
+installers/       Installer customization and signing notes
+scripts/          Build, packaging, and release entry points
+docs/             Architecture, design system, development, distribution
 ```
 
-Read [docs/development.md](./docs/development.md) before changing the app and
-[docs/distribution.md](./docs/distribution.md) before publishing binaries.
+## What is already wired up
+
+- Signed automatic updates, off until you run `bun run updater:init`
+- A light and dark design token system with a user-visible theme control
+- Settings persisted to the platform configuration directory
+- Single-instance launch, restored window position, structured logging
+- Cross-platform CI and a tagged release workflow producing draft releases
 
 ## Before the first release
 
-Replace the placeholder identifier `__PROJECT_IDENTIFIER__` in
-`crates/app/tauri.conf.json` with a reverse-domain identifier you control, and
-replace the generated application icon.
+1. Set a bundle identifier you own in `crates/app/tauri.conf.json`.
+2. Replace `resources/app-icon.svg` and run
+   `bun run tauri icon resources/app-icon.svg --output resources/icons`.
+3. Run `bun run updater:init --repo owner/name` to enable updates.
+4. Add signing credentials — see [docs/distribution.md](./docs/distribution.md).
+5. Confirm with `bun run release:check` and `bun run check`.
+
+Read [docs/development.md](./docs/development.md) before changing the app,
+[docs/design.md](./docs/design.md) before changing the interface, and
+[docs/distribution.md](./docs/distribution.md) before publishing binaries.

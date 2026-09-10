@@ -10,6 +10,10 @@ bun run check
 npm pack --workspace packages/create-tauri-workspace
 ```
 
+`bun run check` runs the CLI tests and `bun run verify:package`, which asserts
+the tarball's file list and size. If it reports build output, clean
+`packages/create-tauri-workspace/templates/default/` before publishing.
+
 Test the resulting tarball:
 
 ```bash

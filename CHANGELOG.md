@@ -7,6 +7,33 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Signed automatic updates in the template, set up by `bun run updater:init`.
+  The updater plugin registers only when a public key is configured.
+- A design token system with light and dark themes, reusable component classes,
+  and a theme control in the generated window.
+- Persisted user settings, backed by the bundled `resources/defaults/settings.json`.
+- Single-instance launch, window state restoration, structured logging, and an
+  interface error boundary.
+- A release preflight job that checks the tag, the version, and the update
+  signing secret before any platform builds, plus pass-through for Apple
+  signing and notarization secrets.
+- `--identifier` and `--repo` options, so a generated project needs no manual
+  configuration edit before its first release.
+- A `skill install` subcommand that installs the `desktop-app` skill for both
+  Claude Code and Codex, and a Claude Code plugin marketplace manifest.
+- A documentation site in `site/`, deployed to GitHub Pages.
+- `bun run verify:package`, which asserts the published tarball's contents, and
+  a CI job that generates a project and runs its checks.
+- A `bun.lock` in the template, so `bun install --frozen-lockfile` is meaningful.
+
+### Changed
+
+- `bun run check` in the generated project now also runs `cargo test`.
+- The generated `docs/` gained `design.md` and a rewritten `distribution.md`
+  covering update signing, Apple notarization, and Windows code signing.
+
 ## [0.1.0] - 2026-07-27
 
 ### Added

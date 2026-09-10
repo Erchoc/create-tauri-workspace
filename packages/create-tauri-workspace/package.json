@@ -9,6 +9,7 @@
   "files": [
     "bin",
     "src",
+    "skills",
     "templates",
     "README.md",
     "LICENSE"
@@ -17,14 +18,20 @@
     "test": "node --test test/*.test.mjs"
   },
   "keywords": [
-    "tauri",
-    "rust",
     "bun",
-    "vite",
-    "react",
+    "claude-code",
+    "code-signing",
+    "codex",
+    "cross-platform",
     "desktop",
     "generator",
-    "scaffold"
+    "react",
+    "rust",
+    "scaffold",
+    "skill",
+    "tauri",
+    "updater",
+    "vite"
   ],
   "author": "Erchoc",
   "license": "MIT",

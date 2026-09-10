@@ -1,0 +1,19 @@
+{
+  "name": "create-tauri-workspace",
+  "owner": {
+    "name": "Erchoc",
+    "url": "https://github.com/erchoc"
+  },
+  "description": "Skills for building cross-platform desktop applications.",
+  "plugins": [
+    {
+      "name": "desktop-app",
+      "source": "./packages/create-tauri-workspace",
+      "description": "Build cross-platform macOS and Windows desktop applications with create-tauri-workspace.",
+      "displayName": "Cross-platform desktop app",
+      "category": "development",
+      "keywords": ["tauri", "desktop", "macos", "windows", "rust", "react"],
+      "license": "MIT"
+    }
+  ]
+}

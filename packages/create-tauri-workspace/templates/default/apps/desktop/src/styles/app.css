@@ -1,0 +1,90 @@
+/*
+ * Application layout.
+ *
+ * The window itself never scrolls: the header stays put and only the content
+ * region scrolls, so adding a section to the page can never push controls out
+ * of reach.
+ */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding-inline: clamp(var(--space-4), 4vw, var(--space-7));
+}
+
+.shell-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex: none;
+  gap: var(--space-5);
+  padding-block: clamp(var(--space-5), 4vh, var(--space-7)) var(--space-5);
+}
+
+.shell-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: clamp(var(--space-5), 4vh, var(--space-7));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-block: var(--space-2) var(--space-3);
+  font-size: var(--text-display);
+  font-weight: 660;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.lede {
+  max-width: 52ch;
+  color: var(--color-text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.grid-wide {
+  grid-column: 1 / -1;
+}
+
+.section-heading {
+  font-size: var(--text-lg);
+}
+
+@media (max-width: 720px) {
+  .shell-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-block: var(--space-5) var(--space-4);
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+}
