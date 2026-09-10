@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 
+import { ConfirmDialog } from "./components/ConfirmDialog";
 import { ThemeControl } from "./components/ThemeControl";
 import { UpdateBanner } from "./components/UpdateBanner";
 import { useSettings } from "./hooks/useSettings";
@@ -22,7 +23,8 @@ const browserPreview: AppInfo = {
 
 export default function App() {
   const { settings, update, loaded } = useSettings();
-  const updater = useUpdater(loaded && settings.autoUpdateCheck);
+  const updater = useUpdater(loaded && settings.automaticUpdates);
+  const [confirmingInstall, setConfirmingInstall] = useState(false);
   const [info, setInfo] = useState<AppInfo>(browserPreview);
   const [name, setName] = useState("desktop");
   const [message, setMessage] = useState("Native command ready");
@@ -59,8 +61,12 @@ export default function App() {
     }
   }
 
-  const canCheck =
-    updater.state.kind !== "checking" && updater.state.kind !== "downloading";
+  const busy =
+    updater.state.kind === "checking" ||
+    updater.state.kind === "downloading" ||
+    updater.state.kind === "installing";
+  const readyVersion =
+    updater.state.kind === "ready" ? updater.state.version : undefined;
 
   return (
     <main className="shell">
@@ -86,7 +92,7 @@ export default function App() {
                 className="button"
                 data-variant="secondary"
                 type="button"
-                disabled={!canCheck}
+                disabled={busy}
                 onClick={() => {
                   void updater.check();
                 }}
@@ -101,7 +107,7 @@ export default function App() {
         <UpdateBanner
           state={updater.state}
           onInstall={() => {
-            void updater.install();
+            setConfirmingInstall(true);
           }}
         />
 
@@ -169,16 +175,30 @@ export default function App() {
             <label className="row">
               <input
                 type="checkbox"
-                checked={settings.autoUpdateCheck}
+                checked={settings.automaticUpdates}
                 onChange={(event) => {
-                  update({ autoUpdateCheck: event.target.checked });
+                  update({ automaticUpdates: event.target.checked });
                 }}
               />
-              Check for updates when the application starts
+              Download updates automatically
             </label>
           </article>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmingInstall}
+        title="Install the update?"
+        description={`${info.name} will close, install version ${readyVersion ?? ""}, and reopen. Save your work before continuing.`}
+        confirmLabel="Close and install"
+        onConfirm={() => {
+          setConfirmingInstall(false);
+          void updater.install();
+        }}
+        onCancel={() => {
+          setConfirmingInstall(false);
+        }}
+      />
     </main>
   );
 }

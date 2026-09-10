@@ -8,7 +8,7 @@ import {
   type Theme,
 } from "../lib/bridge";
 
-const fallback: Settings = { theme: "system", autoUpdateCheck: true };
+const fallback: Settings = { theme: "system", automaticUpdates: true };
 
 /**
  * Applies the chosen colour scheme.

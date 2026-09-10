@@ -55,7 +55,7 @@ mod tests {
     fn defaults_to_the_system_theme() {
         let settings = Settings::default();
         assert_eq!(settings.theme, Theme::System);
-        assert!(settings.auto_update_check);
+        assert!(settings.automatic_updates);
     }
 
     #[test]
@@ -80,7 +80,7 @@ mod tests {
 
         let settings = Settings {
             theme: Theme::Dark,
-            auto_update_check: false,
+            automatic_updates: false,
         };
         save_settings(&path, &settings).unwrap();
         assert_eq!(load_settings(&path).unwrap(), Some(settings));

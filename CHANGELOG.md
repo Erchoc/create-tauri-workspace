@@ -7,6 +7,19 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Updates now download in the background as soon as they are found, and the
+  banner appears only once the download has finished and been verified.
+  Previously the banner announced an update and the download did not start
+  until the user clicked, leaving them watching a progress bar.
+- Installing an update now asks first. A modal explains that the application
+  will close, install, and reopen; the safe answer holds focus. Previously one
+  click downloaded, installed and restarted with no confirmation at all.
+- Renamed the `autoUpdateCheck` setting to `automaticUpdates`, because it now
+  governs the background download as well as the check.
+- The release workflow triggers on `v*` tags instead of `app-v*`.
+
 ### Added
 
 - Signed automatic updates in the template, set up by `bun run updater:init`.
@@ -32,6 +45,11 @@ and this project follows [Semantic Versioning](https://semver.org/).
   needs, and print the exact command to fix anything missing. Generation runs
   the same check and warns without blocking.
 - A Simplified Chinese translation of the README.
+- A `ConfirmDialog` component built on the native `<dialog>` element, so the
+  modal gets focus trapping, Escape handling and an inert background for free.
+- Documentation of exactly how an update reaches a user, how to test the flow
+  before shipping it, and how to move downloads off GitHub Releases onto object
+  storage behind a custom domain.
 - A Simplified Chinese version of the documentation site, with a language
   switcher, plus social card metadata, canonical URLs, `robots.txt`, and a
   sitemap.

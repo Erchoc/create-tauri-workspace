@@ -16,7 +16,7 @@ export type Theme = "system" | "light" | "dark";
 
 export type Settings = {
   theme: Theme;
-  autoUpdateCheck: boolean;
+  automaticUpdates: boolean;
 };
 
 export type UpdateStatus = {

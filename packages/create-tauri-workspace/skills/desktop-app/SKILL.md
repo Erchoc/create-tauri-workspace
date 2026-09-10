@@ -118,6 +118,13 @@ CLI's prompt hangs. The command prints the `gh secret set` lines that upload
 the private key. Tell the user to back that key up — losing it means installed
 copies can never be updated again.
 
+The flow this produces, which is worth stating when someone asks "will users
+actually get it?": on launch the app checks, downloads in the background, and
+only then shows a banner saying the update is ready. Installing closes the
+app, so it happens only after the user confirms a modal. Nothing installs
+behind their back, and a draft release is invisible to the updater — it has to
+be published.
+
 ### Signing
 
 - **macOS needs a paid Apple Developer account.** Without notarization,
@@ -134,7 +141,7 @@ copies can never be updated again.
 ```bash
 # Same version in package.json and crates/app/tauri.conf.json.
 bun run release:check
-git tag app-v<version> && git push origin app-v<version>
+git tag v<version> && git push origin v<version>
 ```
 
 The workflow verifies the tag matches the configured version before any

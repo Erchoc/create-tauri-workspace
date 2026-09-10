@@ -3,7 +3,7 @@ name: Release desktop apps
 on:
   push:
     tags:
-      - "app-v*"
+      - "v*"
 
 permissions:
   contents: write
@@ -33,7 +33,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
       - name: Verify the tag matches the configured version
         run: |
-          expected="app-v${{ steps.config.outputs.version }}"
+          expected="v${{ steps.config.outputs.version }}"
           if [ "${{ github.ref_name }}" != "$expected" ]; then
             echo "::error::Tag ${{ github.ref_name }} does not match $expected from tauri.conf.json."
             exit 1
@@ -106,7 +106,7 @@ jobs:
         with:
           projectPath: crates/app
           tauriScript: bun run tauri
-          tagName: app-v__VERSION__
+          tagName: v__VERSION__
           releaseName: "__PROJECT_DISPLAY_NAME__ v__VERSION__"
           releaseBody: "Download the installer for your platform."
           releaseDraft: true

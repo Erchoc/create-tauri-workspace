@@ -30,9 +30,12 @@ pub enum Theme {
 pub struct Settings {
     #[serde(default)]
     pub theme: Theme,
-    /// Whether the application may check for updates on start-up.
+    /// Whether the application may check for and download updates on its own.
+    ///
+    /// This covers the download, not just the check, because a background
+    /// download spends the user's bandwidth without asking.
     #[serde(default = "enabled")]
-    pub auto_update_check: bool,
+    pub automatic_updates: bool,
 }
 
 fn enabled() -> bool {
@@ -43,7 +46,7 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             theme: Theme::default(),
-            auto_update_check: enabled(),
+            automatic_updates: enabled(),
         }
     }
 }

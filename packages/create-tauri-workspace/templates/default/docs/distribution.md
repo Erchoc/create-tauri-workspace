@@ -51,6 +51,36 @@ GitHub Releases hosts the update manifest, so there is no server to run: the
 release workflow uploads `latest.json` next to the installers, and the
 application reads it from the endpoint written into the configuration.
 
+### How an update reaches a user
+
+1. **On launch**, if the user has automatic updates on, the application asks
+   the endpoint whether a newer version exists. Nothing is shown: a failed
+   check on a flaky connection is not the user's problem.
+2. **If one exists it downloads immediately**, in the background, and verifies
+   the signature. Still nothing is shown — a half-finished download is not
+   something the user can act on.
+3. **Once downloaded**, a banner appears: *"Version X is downloaded and ready
+   to install."*
+4. **The user clicks Install now**, and a modal explains that the application
+   will close, install, and reopen. Nothing has been installed yet.
+5. **Only when the user confirms** does the install run, followed by a restart.
+
+Installing is never automatic, because it closes the application. A user with
+unsaved work decides when that happens, not the updater.
+
+`bun run dev` never sees an update: the development binary reports the version
+from `tauri.conf.json`, and the endpoint serves that same version.
+
+### Testing the flow before real users see it
+
+1. Release the current version, and install it from the artifacts.
+2. Raise the version in `package.json` and `crates/app/tauri.conf.json`, then
+   tag and release again.
+3. Launch the installed copy. The banner should appear within a few seconds.
+
+Testing against a draft release does not work: the updater only reads a
+published one.
+
 ## 2. Sign and notarize for macOS
 
 Notarization requires a paid Apple Developer Program membership. Export a
@@ -100,8 +130,8 @@ bun run release:check
 bun run check
 
 # 3. Tag and push.
-git tag app-v0.2.0
-git push origin app-v0.2.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 The tag starts `.github/workflows/release.yml`. A preflight job verifies the
@@ -111,6 +141,56 @@ in parallel and upload to a **draft** release. Review the draft and publish it
 when the artifacts look right.
 
 The updater only sees a published release, so a draft is safe to discard.
+
+## Hosting updates yourself
+
+GitHub Releases is the default because it needs no infrastructure, but the
+updater only requires a URL that returns a manifest. Object storage behind a
+custom domain — Cloudflare R2, S3, anything static — works the same way.
+
+Point the endpoint at your own host:
+
+```json
+"endpoints": ["https://downloads.example.com/latest.json"]
+```
+
+The endpoint may carry variables, which the updater substitutes before the
+request: `{{target}}` (`linux`, `windows`, `darwin`), `{{arch}}` (`x86_64`,
+`aarch64`, `i686`, `armv7`), and `{{current_version}}`. Static hosting can
+ignore them and serve one manifest for every platform.
+
+The manifest is the file `tauri-action` already generates for GitHub Releases,
+so the migration is a copy step rather than a rewrite:
+
+```json
+{
+  "version": "1.2.0",
+  "notes": "What changed in this release.",
+  "pub_date": "2026-09-10T08:00:00Z",
+  "platforms": {
+    "darwin-aarch64": { "signature": "<contents of the .sig file>", "url": "https://downloads.example.com/1.2.0/App_aarch64.app.tar.gz" },
+    "darwin-x86_64": { "signature": "...", "url": "..." },
+    "windows-x86_64": { "signature": "...", "url": "..." },
+    "linux-x86_64": { "signature": "...", "url": "..." }
+  }
+}
+```
+
+Only `version`, and each platform's `url` and `signature`, are required. The
+`signature` is the literal contents of the artifact's `.sig` file, not a path.
+
+Two things to keep right when you move:
+
+- **Serve the manifest over HTTPS**, and keep the same signing key. The key is
+  what makes an untrusted host safe: a tampered download fails verification
+  regardless of where it came from.
+- **A dynamic endpoint should answer `204 No Content`** when there is no
+  update. A static host cannot, which is fine — the client compares versions
+  itself.
+
+To keep publishing through GitHub Actions, add a step after `tauri-action`
+that uploads the artifacts and `latest.json` to your bucket. Keep the GitHub
+Release as the build record even when downloads move.
 
 ## Local builds
 

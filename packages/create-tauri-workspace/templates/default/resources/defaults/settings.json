@@ -1,4 +1,4 @@
 {
   "theme": "system",
-  "autoUpdateCheck": true
+  "automaticUpdates": true
 }
