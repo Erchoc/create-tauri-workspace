@@ -125,7 +125,7 @@ function platformCheck() {
       found: "webkit2gtk-4.1",
       reason: "provides the webview the window renders into.",
       remedy: [
-        "sudo apt-get install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf",
+        "sudo apt-get install libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf",
         "Other distributions: https://v2.tauri.app/start/prerequisites/",
       ],
     };
