@@ -6,13 +6,18 @@ Code.
 
 ## Requirements
 
-- [Bun](https://bun.sh/) 1.3 or newer
-- [Rust](https://www.rust-lang.org/tools/install) stable
-- [Tauri platform prerequisites](https://v2.tauri.app/start/prerequisites/)
+| Tool | Minimum |
+| --- | --- |
+| [Bun](https://bun.sh/) | 1.4 |
+| [Node.js](https://nodejs.org/) | 24 |
+| [Rust](https://rustup.rs/) | 1.98 |
+
+Plus the [Tauri platform prerequisites](https://v2.tauri.app/start/prerequisites/).
 
 ## Development
 
 ```bash
+bun run doctor   # checks the toolchain and explains anything missing
 bun install
 bun run dev
 ```

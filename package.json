@@ -2,17 +2,23 @@
   "name": "create-tauri-workspace-repo",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "bun@1.3.11",
+  "type": "module",
+  "packageManager": "bun@1.4.2",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "check": "bun run test && node --check scripts/publish.mjs && bun run verify:package",
-    "test": "node --test packages/create-tauri-workspace/test/*.test.mjs",
+    "check": "bun run test && node --check scripts/publish.js && bun run verify:package",
+    "test": "node --test packages/create-tauri-workspace/test/*.test.js",
     "pack": "npm pack --workspace packages/create-tauri-workspace",
     "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run",
-    "verify:package": "node scripts/verify-package.mjs",
-    "skill:install": "node packages/create-tauri-workspace/bin/create-tauri-workspace.mjs skill install",
-    "publish": "node scripts/publish.mjs"
+    "verify:package": "node scripts/verify-package.js",
+    "skill:install": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js skill install",
+    "publish": "node scripts/publish.js",
+    "doctor": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js doctor"
+  },
+  "engines": {
+    "node": ">=24",
+    "bun": ">=1.4"
   }
 }

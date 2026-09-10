@@ -1,8 +1,9 @@
 {
   "name": "__PROJECT_SLUG__",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
-  "packageManager": "bun@1.3.11",
+  "packageManager": "bun@1.4.2",
   "workspaces": [
     "apps/*",
     "crates/app"
@@ -15,7 +16,12 @@
     "frontend:build": "bun run --cwd apps/desktop build",
     "frontend:check": "bun run --cwd apps/desktop check",
     "check": "cargo fmt --all --check && bun run frontend:check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
-    "release:check": "node scripts/release-check.mjs",
-    "updater:init": "node scripts/updater-init.mjs"
+    "doctor": "node scripts/doctor.js",
+    "release:check": "node scripts/release-check.js",
+    "updater:init": "node scripts/updater-init.js"
+  },
+  "engines": {
+    "bun": ">=1.4",
+    "node": ">=24"
   }
 }

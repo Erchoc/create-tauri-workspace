@@ -8,16 +8,20 @@ that Claude Code and Codex use to drive it.
 
 ## Structure
 
-- `packages/create-tauri-workspace/` contains the npm CLI.
-- `packages/create-tauri-workspace/templates/default/` contains the generated application.
-- `packages/create-tauri-workspace/skills/desktop-app/` contains the skill, which is also the Claude Code plugin source.
+- `packages/create-tauri-workspace/bin/` is the executable entry point.
+- `packages/create-tauri-workspace/src/` holds one module per concern:
+  `index` dispatches, `options` parses arguments, `project` scaffolds, `skill`
+  installs, `doctor` and `requirements` check the machine, `versions`,
+  `shell`, `terminal`, and `paths` are shared helpers.
+- `packages/create-tauri-workspace/templates/default/` is the generated application.
+- `packages/create-tauri-workspace/skills/desktop-app/` is the skill, and also the Claude Code plugin source.
 - `.claude-plugin/marketplace.json` publishes that skill as a plugin.
-- `site/` contains the documentation page deployed to GitHub Pages.
-- `docs/` contains public project assets.
+- `site/` is the documentation page deployed to GitHub Pages, and holds the screenshots the READMEs link to.
 - `work/` is ignored scratch space for generated smoke-test projects.
 
 ## Commands
 
+- `bun run doctor` checks this machine's toolchain.
 - `bun run test` runs the CLI test suite.
 - `bun run check` runs tests and verifies the npm package contents.
 - `bun run verify:package` asserts the tarball's file list, size, and contents.
@@ -29,7 +33,13 @@ inside it. CI does the same on every push.
 
 ## Project Rules
 
-- Keep all source code, comments, CLI output, and public documentation in English.
+- Keep all source code, comments, CLI output, and documentation in English. The
+  translated `README.zh-CN.md` is the one exception, and it tracks `README.md`.
+- Keep JavaScript files on the `.js` extension. Both manifests declare
+  `"type": "module"`, so plain `.js` is already ESM.
+- Declare the required Bun, Node.js, and Rust versions in
+  `src/requirements.js`, and mirror them in the template's `engines` and
+  `rust-version`. A test fails when the two drift apart.
 - Keep the CLI free of runtime dependencies; prefer Node.js built-in modules.
 - Keep the generated Rust workspace focused on `crates/app` and `crates/core` until a real boundary justifies another crate.
 - Keep Bun as a development tool only. Generated desktop applications must not ship a JavaScript runtime.

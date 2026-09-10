@@ -24,13 +24,15 @@ const forbidden = [
 ];
 
 const required = [
-  "bin/create-tauri-workspace.mjs",
-  "src/cli.mjs",
+  "bin/create-tauri-workspace.js",
+  "src/index.js",
+  "src/requirements.js",
+  "skills/desktop-app/SKILL.md",
   "templates/default/package.json",
   "templates/default/bun.lock",
   "templates/default/_gitignore",
   "templates/default/crates/app/tauri.conf.json",
-  "templates/default/scripts/updater-init.mjs",
+  "templates/default/scripts/updater-init.js",
 ];
 
 const maximumFiles = 150;

@@ -22,7 +22,7 @@ Changes to the bundled template must also be tested by creating a project and
 running `bun run check` inside it:
 
 ```bash
-node packages/create-tauri-workspace/bin/create-tauri-workspace.mjs demo-app \
+node packages/create-tauri-workspace/bin/create-tauri-workspace.js demo-app \
   --output ./work --identifier dev.example.demo --repo example/demo --no-git
 cd work/demo-app && bun run check
 ```

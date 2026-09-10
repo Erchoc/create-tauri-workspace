@@ -19,6 +19,7 @@
 
 ## Commands
 
+- `bun run doctor` checks this machine's toolchain and reports how to fix it.
 - `bun run dev` starts the Tauri development application.
 - `bun run frontend:dev` starts the browser-only frontend.
 - `bun run check` runs formatting, frontend types, Clippy, and Rust tests.
@@ -44,6 +45,9 @@
 - Do not commit secrets, signing certificates, generated bundles, or local
   environment files. The updater private key never belongs in the repository.
 - Run `bun run check` before submitting changes.
+- The required Bun, Node.js, and Rust versions are declared once, in `engines`
+  in package.json and `rust-version` in Cargo.toml. `scripts/doctor.js` reads
+  them; never hard-code a version anywhere else.
 
 ## Interface Rules
 

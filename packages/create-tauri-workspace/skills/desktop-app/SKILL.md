@@ -22,7 +22,18 @@ already contains `crates/app/tauri.conf.json`, it is the project.
 
 ## Create a project
 
-Ask for nothing you can infer. The only required input is a name.
+Check the machine before scaffolding, and report any problem it finds before
+the user invests time in a project they cannot build:
+
+```bash
+npx create-tauri-workspace doctor
+```
+
+It reports Bun, Node.js, Rust, and the platform webview, and prints the exact
+upgrade command for anything too old. Generation still works on an unprepared
+machine, so this is information, not a gate.
+
+Then ask for nothing you can infer. The only required input is a name.
 
 ```bash
 npx create-tauri-workspace <name> --identifier <reverse.domain.name> --repo <owner/repo>
@@ -40,6 +51,7 @@ Then verify the project actually builds before writing any feature code:
 
 ```bash
 cd <name>
+bun run doctor   # only if the pre-flight check reported a problem
 bun run check
 ```
 
@@ -80,6 +92,10 @@ Finish every change with:
 ```bash
 bun run check
 ```
+
+If it fails because a tool is too old, `bun run doctor` names the tool and the
+upgrade command. The required versions are declared once, in `engines` in
+package.json and `rust-version` in Cargo.toml — never hard-code them elsewhere.
 
 That runs formatting, TypeScript, Clippy with warnings as errors, and the Rust
 tests. Do not report work as done until it passes.

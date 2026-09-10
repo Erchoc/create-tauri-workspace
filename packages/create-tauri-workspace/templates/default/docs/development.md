@@ -1,7 +1,14 @@
 # Development
 
-Install the [Tauri platform prerequisites](https://v2.tauri.app/start/prerequisites/),
-then run:
+Check the machine first:
+
+```bash
+bun run doctor
+```
+
+It reports the Bun, Node.js, and Rust versions this project needs, whether the
+platform webview is installed, and the exact command to fix anything missing.
+Then:
 
 ```bash
 bun install
@@ -15,6 +22,7 @@ the generated static frontend; Bun and Node.js are not shipped to users.
 
 | Command | Purpose |
 | --- | --- |
+| `bun run doctor` | Toolchain check, with the fix for anything missing |
 | `bun run dev` | Vite plus the Tauri window |
 | `bun run frontend:dev` | The interface in a browser, with native calls stubbed |
 | `bun run check` | Formatting, types, Clippy, and Rust tests |

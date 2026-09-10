@@ -4,7 +4,7 @@
   "description": "Scaffold a polished Tauri 2 desktop workspace with Bun, React, Vite, TypeScript, and Rust.",
   "type": "module",
   "bin": {
-    "create-tauri-workspace": "./bin/create-tauri-workspace.mjs"
+    "create-tauri-workspace": "./bin/create-tauri-workspace.js"
   },
   "files": [
     "bin",
@@ -15,7 +15,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "bun",
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/erchoc/create-tauri-workspace#readme",
   "engines": {
-    "node": ">=20.10"
+    "node": ">=24"
   },
   "publishConfig": {
     "access": "public"

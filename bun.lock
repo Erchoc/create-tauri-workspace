@@ -1,5 +1,5 @@
 {
-  "lockfileVersion": 1,
+  "lockfileVersion": 2,
   "configVersion": 1,
   "workspaces": {
     "": {
@@ -9,7 +9,7 @@
       "name": "create-tauri-workspace",
       "version": "0.1.0",
       "bin": {
-        "create-tauri-workspace": "./bin/create-tauri-workspace.mjs",
+        "create-tauri-workspace": "./bin/create-tauri-workspace.js",
       },
     },
   },
