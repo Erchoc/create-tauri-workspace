@@ -9,7 +9,54 @@ permissions:
   contents: write
 
 jobs:
+  # Fails in about a minute instead of after a full cross-platform build.
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      updater: ${{ steps.config.outputs.updater }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - run: bun install --frozen-lockfile
+      - run: bun run release:check
+      - id: config
+        name: Read release configuration
+        run: |
+          read_config() {
+            node -p "JSON.parse(require('fs').readFileSync('crates/app/tauri.conf.json','utf8'))$1"
+          }
+          {
+            echo "updater=$(read_config '.bundle.createUpdaterArtifacts === true')"
+            echo "version=$(read_config '.version')"
+          } >> "$GITHUB_OUTPUT"
+      - name: Verify the tag matches the configured version
+        run: |
+          expected="app-v${{ steps.config.outputs.version }}"
+          if [ "${{ github.ref_name }}" != "$expected" ]; then
+            echo "::error::Tag ${{ github.ref_name }} does not match $expected from tauri.conf.json."
+            exit 1
+          fi
+      - name: Verify the update signing secret
+        if: steps.config.outputs.updater == 'true'
+        env:
+          SIGNING_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SIGNING_KEY" ]; then
+            echo "::error::Updater artifacts are enabled but TAURI_SIGNING_PRIVATE_KEY is not set. Run bun run updater:init and upload the key it reports."
+            exit 1
+          fi
+      - name: Report unsigned platforms
+        env:
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+        run: |
+          if [ -z "$APPLE_SIGNING_IDENTITY" ]; then
+            echo "::warning::No Apple signing identity. macOS builds will be unsigned, Gatekeeper will refuse to open them, and macOS updates cannot install."
+          fi
+
   build:
+    needs: preflight
     strategy:
       fail-fast: false
       matrix:
@@ -45,6 +92,17 @@ jobs:
       - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Signs the update package. Required when updater artifacts are on.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          # Apple Developer credentials. Each is optional: when a value is
+          # empty the action skips that step and produces an unsigned build.
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
           projectPath: crates/app
           tauriScript: bun run tauri

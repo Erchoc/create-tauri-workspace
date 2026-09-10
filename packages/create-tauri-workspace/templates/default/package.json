@@ -13,8 +13,9 @@
     "tauri": "bun run --cwd crates/app tauri",
     "frontend:dev": "bun run --cwd apps/desktop dev",
     "frontend:build": "bun run --cwd apps/desktop build",
-    "check": "bun run frontend:check && cargo check --workspace && cargo clippy --workspace --all-targets -- -D warnings && cargo fmt --all --check",
     "frontend:check": "bun run --cwd apps/desktop check",
-    "release:check": "node scripts/release-check.mjs"
+    "check": "cargo fmt --all --check && bun run frontend:check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
+    "release:check": "node scripts/release-check.mjs",
+    "updater:init": "node scripts/updater-init.mjs"
   }
 }

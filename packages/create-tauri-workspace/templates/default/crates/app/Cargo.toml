@@ -17,5 +17,18 @@ path = "src/main.rs"
 tauri-build.workspace = true
 
 [dependencies]
-tauri.workspace = true
 app-core = { path = "../core" }
+log.workspace = true
+serde.workspace = true
+# tauri::generate_context! expands to code that parses the plugin
+# configuration, so the crate needs serde_json in scope.
+serde_json.workspace = true
+tauri.workspace = true
+tauri-plugin-log.workspace = true
+tauri-plugin-opener.workspace = true
+
+[target.'cfg(any(target_os = "linux", target_os = "macos", windows))'.dependencies]
+tauri-plugin-process.workspace = true
+tauri-plugin-single-instance.workspace = true
+tauri-plugin-updater.workspace = true
+tauri-plugin-window-state.workspace = true

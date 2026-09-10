@@ -7,10 +7,12 @@
     "packages/*"
   ],
   "scripts": {
-    "check": "bun run test && node --check scripts/publish.mjs && bun run pack:dry",
+    "check": "bun run test && node --check scripts/publish.mjs && bun run verify:package",
     "test": "node --test packages/create-tauri-workspace/test/*.test.mjs",
     "pack": "npm pack --workspace packages/create-tauri-workspace",
     "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run",
+    "verify:package": "node scripts/verify-package.mjs",
+    "skill:install": "node packages/create-tauri-workspace/bin/create-tauri-workspace.mjs skill install",
     "publish": "node scripts/publish.mjs"
   }
 }

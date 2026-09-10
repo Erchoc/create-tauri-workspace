@@ -23,3 +23,34 @@ jobs:
           package-manager-cache: false
       - run: bun install --frozen-lockfile
       - run: bun run check
+
+  # The template is the product. Generating a project and running its own
+  # checks is the only thing that catches a template that no longer builds.
+  template:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: Generate a project
+        run: |
+          node packages/create-tauri-workspace/bin/create-tauri-workspace.mjs smoke-app \
+            --output "$RUNNER_TEMP" \
+            --identifier dev.example.smokeapp \
+            --repo example/smoke-app \
+            --no-git
+      - name: Check the generated project
+        working-directory: ${{ runner.temp }}/smoke-app
+        run: bun run check
+      - name: Confirm the release check reports a clean project
+        working-directory: ${{ runner.temp }}/smoke-app
+        run: bun run release:check

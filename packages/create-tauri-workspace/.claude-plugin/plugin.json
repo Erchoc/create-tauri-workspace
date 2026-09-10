@@ -1,0 +1,10 @@
+{
+  "name": "desktop-app",
+  "description": "Build cross-platform macOS and Windows desktop applications with create-tauri-workspace.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Erchoc"
+  },
+  "homepage": "https://github.com/erchoc/create-tauri-workspace",
+  "license": "MIT"
+}
