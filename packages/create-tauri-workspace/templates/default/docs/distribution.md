@@ -68,6 +68,17 @@ application reads it from the endpoint written into the configuration.
 Installing is never automatic, because it closes the application. A user with
 unsaved work decides when that happens, not the updater.
 
+The last step differs by platform, and the difference is normal:
+
+- **Windows** hands over to the NSIS installer, which closes the application
+  and reopens it once it finishes. `installMode` is `passive`, so the user sees
+  a progress window but is not asked anything.
+- **macOS and Linux** replace the application in place, and the restart is the
+  updater's own.
+
+On Windows the process may already be gone before the explicit relaunch runs.
+That is expected, not a bug.
+
 `bun run dev` never sees an update: the development binary reports the version
 from `tauri.conf.json`, and the endpoint serves that same version.
 
