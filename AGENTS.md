@@ -21,6 +21,8 @@ that Claude Code and Codex use to drive it.
 
 ## Commands
 
+- `bun run demo` regenerates `work/demo-app` from the current source.
+- `bun run create` runs the generator itself, with any options.
 - `bun run doctor` checks this machine's toolchain.
 - `bun run test` runs the CLI test suite.
 - `bun run check` runs tests and verifies the npm package contents.

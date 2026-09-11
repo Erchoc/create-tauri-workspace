@@ -99,7 +99,8 @@ scripts/                  打包校验与发布辅助脚本
 
 ```bash
 bun install
-bun run check
+bun run check     # 测试、npm 包内容校验、网站校验
+bun run demo      # 用当前代码生成 work/demo-app，然后进去跑
 ```
 
 详见 [CONTRIBUTING.md](./CONTRIBUTING.md) 与 [PUBLISHING.md](./PUBLISHING.md)。

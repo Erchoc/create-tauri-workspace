@@ -45,6 +45,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
   needs, and print the exact command to fix anything missing. Generation runs
   the same check and warns without blocking.
 - A Simplified Chinese translation of the README.
+- `bun run demo` and `bun run create` in this repository, so the generator can
+  be driven from a checkout without retyping its path. `demo` replaces the
+  previous scratch project under `work/` on every run, which the generator
+  itself refuses to do.
 - `bun run updater:serve`, which finds the signed artifacts of a local build,
   writes the manifest the updater expects, and serves both over HTTP, so the
   whole update flow can be exercised without publishing anything. A debug build

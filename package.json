@@ -10,12 +10,14 @@
   "scripts": {
     "check": "bun run test && node --check scripts/publish.js && bun run verify:package && bun run verify:site",
     "test": "node --test packages/create-tauri-workspace/test/*.test.js",
+    "create": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js",
+    "demo": "node scripts/demo.js",
     "doctor": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js doctor",
+    "skill:install": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js skill install",
     "pack": "npm pack --workspace packages/create-tauri-workspace",
     "pack:dry": "npm pack --workspace packages/create-tauri-workspace --dry-run",
     "verify:package": "node scripts/verify-package.js",
     "verify:site": "node scripts/verify-site.js",
-    "skill:install": "node packages/create-tauri-workspace/bin/create-tauri-workspace.js skill install",
     "publish": "node scripts/publish.js"
   },
   "engines": {

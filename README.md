@@ -104,7 +104,8 @@ scripts/                  Package verification and release helpers
 
 ```bash
 bun install
-bun run check
+bun run check     # tests, package and site verification
+bun run demo      # generate work/demo-app from this checkout, then run it
 ```
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) and [PUBLISHING.md](./PUBLISHING.md).

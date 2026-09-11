@@ -13,24 +13,31 @@ Thanks for helping improve `create-tauri-workspace`.
 
 ## Trying it on your own machine
 
-The CLI has no dependencies, so a fresh clone can check your machine before you
-install anything:
-
 ```bash
 git clone https://github.com/erchoc/create-tauri-workspace.git
 cd create-tauri-workspace
-node packages/create-tauri-workspace/bin/create-tauri-workspace.js doctor
-```
+bun install
 
-Generate a project from the checkout rather than from npm, which may be behind:
-
-```bash
-node packages/create-tauri-workspace/bin/create-tauri-workspace.js my-app \
-  --output ~/Projects --identifier dev.you.myapp --repo you/my-app
-
-cd ~/Projects/my-app
+bun run demo        # generates work/demo-app from this checkout
+cd work/demo-app
 bun run dev
 ```
+
+`bun run demo` replaces the previous scratch project each time, so it is safe
+to repeat after every change. Pass a name for a second one: `bun run demo
+notes-app`. Everything under `work/` is ignored by git.
+
+For a real project, or to pass your own options, use `bun run create`, which is
+the CLI itself:
+
+```bash
+bun run create my-app \
+  --output ~/Projects --identifier dev.you.myapp --repo you/my-app
+```
+
+Always drive the generator from the checkout rather than from npm, which lags
+behind. `bun run doctor` checks your machine and needs no install at all — the
+CLI has no dependencies.
 
 The first `bun run dev` compiles the Rust side and takes a few minutes. Later
 runs are seconds. `bun run frontend:dev` opens the interface in a browser
@@ -65,9 +72,7 @@ Changes to the bundled template must also be tested by creating a project and
 running `bun run check` inside it:
 
 ```bash
-node packages/create-tauri-workspace/bin/create-tauri-workspace.js demo-app \
-  --output ./work --identifier dev.example.demo --repo example/demo --no-git
-cd work/demo-app && bun run check
+bun run demo && cd work/demo-app && bun run check
 ```
 
 Never run a build inside `templates/default/`. The template is copied verbatim,
