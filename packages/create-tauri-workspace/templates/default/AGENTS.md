@@ -26,6 +26,8 @@
 - `bun run build` builds the current platform's desktop bundle.
 - `bun run release:check` reports placeholder release metadata.
 - `bun run updater:init` configures signed automatic updates.
+- `bun run updater:serve` serves a local build so the update flow can be tested
+  without publishing.
 
 ## Project Rules
 

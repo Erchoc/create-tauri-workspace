@@ -18,7 +18,8 @@
     "check": "cargo fmt --all --check && bun run frontend:check && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace",
     "doctor": "node scripts/doctor.js",
     "release:check": "node scripts/release-check.js",
-    "updater:init": "node scripts/updater-init.js"
+    "updater:init": "node scripts/updater-init.js",
+    "updater:serve": "node scripts/updater-serve.js"
   },
   "engines": {
     "bun": ">=1.4",

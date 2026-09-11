@@ -45,6 +45,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
   needs, and print the exact command to fix anything missing. Generation runs
   the same check and warns without blocking.
 - A Simplified Chinese translation of the README.
+- `bun run updater:serve`, which finds the signed artifacts of a local build,
+  writes the manifest the updater expects, and serves both over HTTP, so the
+  whole update flow can be exercised without publishing anything. A debug build
+  accepts the `http://` endpoint it prints; a release build refuses it.
 - A `ConfirmDialog` component built on the native `<dialog>` element, so the
   modal gets focus trapping, Escape handling and an inert background for free.
 - Documentation of exactly how an update reaches a user, how to test the flow

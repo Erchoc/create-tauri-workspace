@@ -29,6 +29,7 @@ the generated static frontend; Bun and Node.js are not shipped to users.
 | `bun run build` | Bundles for the current platform |
 | `bun run release:check` | Placeholder and version checks before a release |
 | `bun run updater:init` | Sets up signed automatic updates |
+| `bun run updater:serve` | Serves a local build to test the update flow |
 
 Run all checks before committing:
 

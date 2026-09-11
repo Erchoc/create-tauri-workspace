@@ -82,15 +82,54 @@ That is expected, not a bug.
 `bun run dev` never sees an update: the development binary reports the version
 from `tauri.conf.json`, and the endpoint serves that same version.
 
-### Testing the flow before real users see it
+### Testing it locally, without publishing anything
 
-1. Release the current version, and install it from the artifacts.
-2. Raise the version in `package.json` and `crates/app/tauri.conf.json`, then
-   tag and release again.
-3. Launch the installed copy. The banner should appear within a few seconds.
+`bun run dev` never sees an update: the development build reports the version
+from `tauri.conf.json`, and so does the endpoint. To exercise the real flow,
+serve a newer build from your own machine.
 
-Testing against a draft release does not work: the updater only reads a
-published one.
+```bash
+# 1. Build the version you want to be offered, signed.
+#    Set the version in package.json and crates/app/tauri.conf.json first.
+export TAURI_SIGNING_PRIVATE_KEY="$(cat ~/.tauri/your-app-updater.key)"
+export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="…"
+bun run build
+
+# 2. Serve it. This writes the manifest and prints the endpoint.
+bun run updater:serve
+```
+
+Then, in the copy you want to be updated:
+
+1. Point `plugins.updater.endpoints` at `http://127.0.0.1:8787/latest.json`.
+2. Set a **lower** version in `package.json` and `crates/app/tauri.conf.json`.
+3. Build and launch it.
+
+The banner should appear within a few seconds of launch.
+
+`updater-serve.js` finds the artifacts by looking for files with a `.sig`
+beside them, so it does not need to know each platform's bundle layout. When a
+build produced several signed artifacts it serves the one the updater would
+pick and says so.
+
+**A debug build accepts an `http://` endpoint with a warning; a release build
+refuses it.** That is deliberate on Tauri's part, and it means local testing
+needs no certificate. If you must test a release build this way, set
+`"dangerousInsecureTransportProtocol": true` under `plugins.updater` — and
+remove it before shipping, or every user's update becomes interceptable.
+
+### Testing the real thing
+
+The local test cannot prove that GitHub Releases serves the manifest correctly,
+so do this once before the first real release:
+
+1. Release the current version, and install it from the published artifacts.
+2. Raise the version, then tag and release again.
+3. **Publish the draft release.** The updater reads
+   `/releases/latest/`, which only ever resolves to a published, non-prerelease
+   release — a draft is invisible to it. This is the single most common reason
+   a tagged release produces no update.
+4. Launch the installed copy. The banner should appear within a few seconds.
 
 ## 2. Sign and notarize for macOS
 

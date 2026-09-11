@@ -33,6 +33,8 @@ const required = [
   "templates/default/_gitignore",
   "templates/default/crates/app/tauri.conf.json",
   "templates/default/scripts/updater-init.js",
+  "templates/default/scripts/updater-serve.js",
+  "templates/default/scripts/doctor.js",
 ];
 
 const maximumFiles = 150;
