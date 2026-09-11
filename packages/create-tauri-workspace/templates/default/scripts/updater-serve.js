@@ -19,7 +19,12 @@ const config = JSON.parse(
 );
 
 function parseArguments(argv) {
-  const options = { port: 8787, host: "127.0.0.1", targetDir: undefined };
+  const options = {
+    port: 8787,
+    host: "127.0.0.1",
+    targetDir: undefined,
+    version: undefined,
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     const value = argv[index + 1];
@@ -31,6 +36,12 @@ function parseArguments(argv) {
       index += 1;
     } else if (argument === "--target-dir") {
       options.targetDir = resolve(value);
+      index += 1;
+    } else if (argument === "--version") {
+      if (!value || !/^\d+\.\d+\.\d+$/.test(value)) {
+        throw new Error("--version requires a value such as 1.2.3.");
+      }
+      options.version = value;
       index += 1;
     } else {
       throw new Error(`Unknown option: ${argument}`);
@@ -116,9 +127,33 @@ function preferred(candidates) {
   return candidates[0];
 }
 
+// The version comes from what was built, never from tauri.conf.json: this
+// script is meant to run while the project has been rolled back to a lower
+// version, and reading the config there would serve that lower version and
+// silently offer no update at all.
+//
+// Most bundles carry the version in their file name. macOS `.app.tar.gz` does
+// not, so a sibling artifact from the same build is consulted before giving up.
+function versionOf(file) {
+  return /[_-](\d+\.\d+\.\d+)[_.-]/.exec(basename(file))?.[1];
+}
+
+function resolveVersion(chosenFile, everyFile) {
+  const found = versionOf(chosenFile) ?? everyFile.map(versionOf).find(Boolean);
+  if (found) {
+    return found;
+  }
+  console.error("Could not read a version from any built artifact.");
+  console.error("Pass it explicitly, matching the build you are serving:");
+  console.error("  bun run updater:serve --version 0.2.0");
+  process.exit(1);
+}
+
 const origin = `http://${options.host}:${options.port}`;
 const key = platformKey();
 const chosen = preferred(artifacts);
+const version =
+  options.version ?? resolveVersion(chosen.file, walk(bundleDir));
 
 if (artifacts.length > 1) {
   console.log("Several signed artifacts exist; serving the one the updater");
@@ -126,7 +161,7 @@ if (artifacts.length > 1) {
 }
 
 const manifest = {
-  version: config.version,
+  version,
   notes: "Local test build.",
   pub_date: new Date().toISOString(),
   platforms: {
@@ -167,7 +202,12 @@ const server = createServer((request, response) => {
 });
 
 server.listen(options.port, options.host, () => {
-  console.log(`\nServing version ${config.version} for ${key}\n`);
+  console.log(`\nServing version ${version} for ${key}\n`);
+  if (version !== config.version) {
+    console.log(
+      `  (this project is currently at ${config.version}, so it will be offered this update)\n`,
+    );
+  }
   for (const artifact of artifacts) {
     const mark = artifact === chosen ? "→" : " ";
     console.log(`  ${mark} ${basename(artifact.file)}`);

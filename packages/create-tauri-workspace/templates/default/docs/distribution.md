@@ -112,6 +112,12 @@ beside them, so it does not need to know each platform's bundle layout. When a
 build produced several signed artifacts it serves the one the updater would
 pick and says so.
 
+It reads the offered version from the built artifact rather than from
+`tauri.conf.json`, because by step 2 the config holds the *lower* version and
+reading it there would offer no update at all. macOS `.app.tar.gz` carries no
+version in its name, so a sibling from the same build supplies it; if you
+built `--bundles app` alone, pass `--version 0.2.0` explicitly.
+
 **A debug build accepts an `http://` endpoint with a warning; a release build
 refuses it.** That is deliberate on Tauri's part, and it means local testing
 needs no certificate. If you must test a release build this way, set
