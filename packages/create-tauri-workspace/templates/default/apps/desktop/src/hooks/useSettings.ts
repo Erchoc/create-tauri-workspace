@@ -7,8 +7,13 @@ import {
   type Settings,
   type Theme,
 } from "../lib/bridge";
+import { resolveLocale, translator, type Locale } from "../lib/i18n";
 
-const fallback: Settings = { theme: "system", automaticUpdates: true };
+const fallback: Settings = {
+  theme: "system",
+  language: "system",
+  automaticUpdates: true,
+};
 
 /**
  * Applies the chosen colour scheme.
@@ -53,6 +58,14 @@ export function useSettings() {
     applyTheme(settings.theme);
   }, [settings.theme]);
 
+  const locale: Locale = resolveLocale(settings.language);
+
+  // Screen readers and the browser's own text handling rely on this being
+  // right, so it follows the resolved locale rather than the preference.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   // The interface updates immediately and the file write follows, so a slow
   // disk never makes the controls feel unresponsive.
   const update = useCallback((patch: Partial<Settings>) => {
@@ -67,5 +80,5 @@ export function useSettings() {
     });
   }, []);
 
-  return { settings, update, loaded };
+  return { settings, update, loaded, locale, t: translator(locale) };
 }

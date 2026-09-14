@@ -30,6 +30,13 @@ pub enum Theme {
 pub struct Settings {
     #[serde(default)]
     pub theme: Theme,
+    /// The interface language, or "system" to follow the operating system.
+    ///
+    /// Unlike `theme`, this is a plain string rather than an enum: which
+    /// languages exist is a frontend concern, and Rust has no reason to gain a
+    /// variant every time a translation is added.
+    #[serde(default = "system")]
+    pub language: String,
     /// Whether the application may check for and download updates on its own.
     ///
     /// This covers the download, not just the check, because a background
@@ -42,10 +49,15 @@ fn enabled() -> bool {
     true
 }
 
+fn system() -> String {
+    "system".to_owned()
+}
+
 impl Default for Settings {
     fn default() -> Self {
         Self {
             theme: Theme::default(),
+            language: system(),
             automatic_updates: enabled(),
         }
     }

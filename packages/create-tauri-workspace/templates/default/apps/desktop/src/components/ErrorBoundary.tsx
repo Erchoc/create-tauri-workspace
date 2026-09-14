@@ -1,5 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
+import { resolveLocale, translator } from "../lib/i18n";
+
 type Props = { children: ReactNode };
 type State = { message: string | null };
 
@@ -24,12 +26,13 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.message === null) {
       return this.props.children;
     }
+    const t = translator(resolveLocale("system"));
     return (
       <main className="shell">
         <div className="shell-content" style={{ justifyContent: "center" }}>
           <div className="card">
-            <span className="card-label">Something went wrong</span>
-            <h1 className="section-heading">The interface stopped</h1>
+            <span className="card-label">{t("error.title")}</span>
+            <h1 className="section-heading">{t("error.heading")}</h1>
             <p className="lede">{this.state.message}</p>
             <div className="row">
               <button
@@ -39,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   this.setState({ message: null });
                 }}
               >
-                Try again
+                {t("error.retry")}
               </button>
               <button
                 className="button"
@@ -49,7 +52,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   window.location.reload();
                 }}
               >
-                Reload
+                {t("error.reload")}
               </button>
             </div>
           </div>

@@ -49,6 +49,40 @@ therefore cannot push controls out of reach.
 Grids use `repeat(auto-fit, minmax(min(20rem, 100%), 1fr))` so cards reflow
 instead of overflowing. Check every change at the window's 760px minimum width.
 
+## Language
+
+The interface ships in English and Simplified Chinese, and follows the
+operating system unless the user picks one.
+
+| File | Holds |
+| --- | --- |
+| `apps/desktop/src/locales/en.ts` | The source language, and the key list |
+| `apps/desktop/src/locales/zh-CN.ts` | The translation, typed against `en` |
+| `apps/desktop/src/lib/i18n.ts` | Locale matching and `t()` |
+
+Rules:
+
+- **Never write a user-visible string in a component.** Add a key to `en.ts`
+  and use `t("your.key")`.
+- **Every locale is typed against `en`**, so a missing or misspelled key fails
+  the type check rather than showing a raw key to a user.
+- **Interpolate with `{name}` placeholders**, never string concatenation:
+  word order differs between languages.
+
+To add a language, copy `zh-CN.ts`, translate the values, and add one entry to
+`LOCALES` and `LOCALE_NAMES` in `i18n.ts`. Matching falls back by base tag, so
+`zh-Hant` reaches `zh-CN` until a Traditional file exists.
+
+### CJK typography
+
+Letter spacing and negative tracking are Latin devices — a Chinese glyph is
+already a full em, so they pull characters apart or crush them. `base.css`
+switches them off under `:root:lang(zh)`, which works because `useSettings`
+keeps `<html lang>` on the resolved locale.
+
+The font stack in `tokens.css` lists CJK families after the Latin ones so
+Chinese text picks a real face rather than a system fallback.
+
 ## Desktop conventions
 
 - Body text is not selectable by default, matching native applications. Real

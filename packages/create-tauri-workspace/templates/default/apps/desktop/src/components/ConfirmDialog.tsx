@@ -5,7 +5,7 @@ type Props = {
   title: string;
   description: string;
   confirmLabel: string;
-  cancelLabel?: string;
+  cancelLabel: string;
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -21,7 +21,7 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel,
-  cancelLabel = "Not now",
+  cancelLabel,
   onConfirm,
   onCancel,
 }: Props) {

@@ -4,6 +4,8 @@
 
 import { invoke, isTauri } from "@tauri-apps/api/core";
 
+import type { LanguagePreference } from "./i18n";
+
 export type AppInfo = {
   name: string;
   version: string;
@@ -16,6 +18,7 @@ export type Theme = "system" | "light" | "dark";
 
 export type Settings = {
   theme: Theme;
+  language: LanguagePreference;
   automaticUpdates: boolean;
 };
 

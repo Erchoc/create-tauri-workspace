@@ -60,3 +60,8 @@
   there rather than styling a one-off element.
 - Verify both light and dark themes, and check layouts at the 760px minimum
   window width with no horizontal overflow.
+- Never write a user-visible string in a component. Add a key to
+  `apps/desktop/src/locales/en.ts` and use `t()`; every other locale is typed
+  against that file, so an untranslated key fails the type check.
+- Do not name the framework in the interface. The starter describes the
+  application being built, not what it is built with.

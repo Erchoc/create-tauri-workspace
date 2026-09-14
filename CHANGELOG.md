@@ -9,6 +9,16 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The starter interface no longer names the framework. It describes the
+  application being built, so nothing has to be deleted before shipping.
+- Every user-visible string moved into `apps/desktop/src/locales/`, and the
+  interface follows the operating system language. English and Simplified
+  Chinese ship; each locale is typed against the English file, so a missing or
+  misspelled key fails the type check instead of reaching a user.
+- Letter spacing and negative tracking are switched off for Chinese and
+  Japanese, which are Latin devices that pull CJK glyphs apart.
+- Replaced `ThemeControl` with a generic `Segmented` component, now used for
+  both the theme and the language.
 - Updates now download in the background as soon as they are found, and the
   banner appears only once the download has finished and been verified.
   Previously the banner announced an update and the download did not start

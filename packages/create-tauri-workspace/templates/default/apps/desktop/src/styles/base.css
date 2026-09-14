@@ -82,6 +82,32 @@ code {
   font-size: var(--text-sm);
 }
 
+/*
+ * CJK typography.
+ *
+ * Letter spacing and negative tracking are Latin devices: applied to Chinese
+ * they pull characters apart or crush them together, because each glyph is
+ * already a full em. `useSettings` keeps <html lang> on the resolved locale,
+ * so these rules follow the language actually being shown.
+ */
+:root:lang(zh) .eyebrow,
+:root:lang(zh) .card-label,
+:root:lang(ja) .eyebrow,
+:root:lang(ja) .card-label {
+  letter-spacing: normal;
+}
+
+:root:lang(zh) .title,
+:root:lang(zh) h1,
+:root:lang(zh) h2,
+:root:lang(zh) h3,
+:root:lang(ja) .title,
+:root:lang(ja) h1,
+:root:lang(ja) h2,
+:root:lang(ja) h3 {
+  letter-spacing: normal;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

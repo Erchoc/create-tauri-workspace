@@ -55,6 +55,7 @@ mod tests {
     fn defaults_to_the_system_theme() {
         let settings = Settings::default();
         assert_eq!(settings.theme, Theme::System);
+        assert_eq!(settings.language, "system");
         assert!(settings.automatic_updates);
     }
 
@@ -80,6 +81,7 @@ mod tests {
 
         let settings = Settings {
             theme: Theme::Dark,
+            language: "zh-CN".to_owned(),
             automatic_updates: false,
         };
         save_settings(&path, &settings).unwrap();

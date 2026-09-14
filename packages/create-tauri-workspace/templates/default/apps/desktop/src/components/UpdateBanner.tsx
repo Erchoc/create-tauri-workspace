@@ -1,7 +1,9 @@
 import type { UpdateState } from "../hooks/useUpdater";
+import type { Translate } from "../lib/i18n";
 
 type Props = {
   state: UpdateState;
+  t: Translate;
   onInstall: () => void;
 };
 
@@ -13,7 +15,7 @@ type Props = {
  * and "unsupported" render nothing either — a project without signing should
  * not advertise an update path it cannot deliver.
  */
-export function UpdateBanner({ state, onInstall }: Props) {
+export function UpdateBanner({ state, t, onInstall }: Props) {
   if (
     state.kind === "idle" ||
     state.kind === "disabled" ||
@@ -28,7 +30,7 @@ export function UpdateBanner({ state, onInstall }: Props) {
     return (
       <div className="banner" data-tone="danger" role="alert">
         <span className="banner-message">
-          Could not update: {state.message}
+          {t("update.failed", { message: state.message })}
         </span>
       </div>
     );
@@ -38,11 +40,11 @@ export function UpdateBanner({ state, onInstall }: Props) {
     return (
       <div className="banner" role="status">
         <span className="banner-message">
-          Version {state.version} is downloaded and ready to install.
+          {t("update.ready", { version: state.version })}
           {state.notes ? ` ${state.notes}` : ""}
         </span>
         <button className="button" type="button" onClick={onInstall}>
-          Install now
+          {t("update.install")}
         </button>
       </div>
     );
@@ -51,12 +53,12 @@ export function UpdateBanner({ state, onInstall }: Props) {
   return (
     <div className="banner" role="status">
       <span className="banner-message">
-        {state.kind === "checking" && "Checking for updates…"}
+        {state.kind === "checking" && t("update.checking")}
         {state.kind === "downloading" &&
           (state.percent === undefined
-            ? "Downloading the update…"
-            : `Downloading the update… ${state.percent}%`)}
-        {state.kind === "installing" && "Installing. The application will restart…"}
+            ? t("update.downloading")
+            : t("update.downloadingPercent", { percent: state.percent }))}
+        {state.kind === "installing" && t("update.installing")}
       </span>
     </div>
   );
