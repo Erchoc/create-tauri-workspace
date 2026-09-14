@@ -15,13 +15,24 @@ import {
 import { LOCALE_NAMES, type LanguagePreference } from "./lib/i18n";
 import type { Theme } from "./lib/bridge";
 
+/**
+ * The result of one native call, kept as data. Storing the sentence instead
+ * would freeze it in whichever language was active when it was produced.
+ */
+type Outcome =
+  | { kind: "value"; value: string }
+  | { kind: "empty" }
+  | { kind: "browser" }
+  /** Errors come from the native side already worded; there is nothing to translate. */
+  | { kind: "error"; message: string };
+
 export default function App() {
   const { settings, update, loaded, t } = useSettings();
   const updater = useUpdater(loaded ? settings.automaticUpdates : null);
   const [confirmingInstall, setConfirmingInstall] = useState(false);
   const [info, setInfo] = useState<AppInfo | undefined>(undefined);
   const [name, setName] = useState("");
-  const [message, setMessage] = useState<string | undefined>(undefined);
+  const [outcome, setOutcome] = useState<Outcome | undefined>(undefined);
 
   useEffect(() => {
     if (!isDesktop) {
@@ -45,12 +56,29 @@ export default function App() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      // The native side returns a value; the wording is chosen here, where the
-      // user's language is known.
       const value = await normalizeInput(name);
-      setMessage(value ? t("demo.result", { value }) : t("demo.empty"));
+      setOutcome(value ? { kind: "value", value } : { kind: "empty" });
     } catch (error) {
-      setMessage(isDesktop ? describeError(error) : t("demo.browserHint"));
+      setOutcome(
+        isDesktop
+          ? { kind: "error", message: describeError(error) }
+          : { kind: "browser" },
+      );
+    }
+  }
+
+  // Translated here rather than where it is produced, so that changing the
+  // language also re-words a result that is already on screen.
+  function describeOutcome(value: Outcome): string {
+    switch (value.kind) {
+      case "value":
+        return t("demo.result", { value: value.value });
+      case "empty":
+        return t("demo.empty");
+      case "browser":
+        return t("demo.browserHint");
+      case "error":
+        return value.message;
     }
   }
 
@@ -131,7 +159,7 @@ export default function App() {
         <div className="row">
           <span className="badge" data-tone="success">
             <span className="badge-dot" />
-            {message ?? t("status.ready")}
+            {outcome ? describeOutcome(outcome) : t("status.ready")}
           </span>
         </div>
 
