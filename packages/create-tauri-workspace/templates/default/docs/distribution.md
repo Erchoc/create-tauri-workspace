@@ -263,8 +263,8 @@ nothing added:
 
 | Artifact | Size |
 | --- | --- |
-| Executable, stripped | 6.1 MB |
-| `.deb` / `.rpm` | 2.8 MB |
+| Executable, stripped | 5.5 MB |
+| `.deb` / `.rpm` | 2.6 MB |
 | `.AppImage` | 74 MB |
 
 macOS and Windows land near the package figure rather than the AppImage one.
@@ -282,10 +282,11 @@ keep the AppImage for everyone else.
 An update downloads the bundle for the platform it is running on, so only
 AppImage users ever pay the AppImage size.
 
-The release profile in `Cargo.toml` is already tuned for this: `opt-level = "s"`,
-`lto = true`, `panic = "abort"`, `strip = true`. `build.removeUnusedCommands`
-drops every built-in command the capability files do not permit, which is most
-of the window and webview API in a starter that never calls it.
+Two settings produce those numbers and are on already. The release profile in
+`Cargo.toml` sets `opt-level = "s"`, `lto = true`, `panic = "abort"` and
+`strip = true`. `build.removeUnusedCommands` drops every built-in command the
+capability files do not permit, which is most of the window and webview API in
+a starter that never calls it: 0.6 MB off the executable here.
 
 ## Local builds
 
