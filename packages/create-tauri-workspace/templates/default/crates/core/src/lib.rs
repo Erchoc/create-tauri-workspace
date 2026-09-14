@@ -5,13 +5,13 @@ mod storage;
 pub use model::{AppInfo, Settings, Theme};
 pub use storage::{default_config_path, load_settings, save_settings};
 
-pub fn greeting(name: &str) -> String {
-    let name = name.trim();
-    if name.is_empty() {
-        "Hello from Rust.".to_owned()
-    } else {
-        format!("Hello, {name}. Rust is connected.")
-    }
+/// Normalizes user input on the native side and hands the value back.
+///
+/// Native code returns values, never sentences: a string built in Rust cannot
+/// be translated by the interface, and the interface is the only layer that
+/// knows which language the user reads.
+pub fn normalize(input: &str) -> String {
+    input.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
 pub fn app_info(name: &str, version: &str, application_slug: &str) -> AppInfo {
@@ -35,12 +35,14 @@ pub fn parse_settings(contents: &str) -> Result<Settings, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{app_info, greeting, load_settings, parse_settings, save_settings};
+    use super::{app_info, load_settings, normalize, parse_settings, save_settings};
     use crate::model::{Settings, Theme};
 
     #[test]
-    fn greets_a_named_user() {
-        assert_eq!(greeting("Tauri"), "Hello, Tauri. Rust is connected.");
+    fn collapses_whitespace_in_input() {
+        assert_eq!(normalize("  hello   world  "), "hello world");
+        assert_eq!(normalize("\t  \n "), "");
+        assert_eq!(normalize("\u{6d4b}\u{8bd5}"), "\u{6d4b}\u{8bd5}");
     }
 
     #[test]

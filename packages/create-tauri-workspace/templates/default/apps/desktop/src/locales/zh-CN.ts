@@ -19,6 +19,8 @@ export const zhCN: Messages = {
   "demo.name": "名字",
   "demo.submit": "运行",
   "demo.browserHint": "请运行桌面应用以调用原生能力。",
+  "demo.result": "原生层返回：{value}",
+  "demo.empty": "原生层没有返回内容。",
 
   "runtime.label": "运行时",
   "runtime.version": "版本",
@@ -34,6 +36,8 @@ export const zhCN: Messages = {
   "storage.automaticUpdates": "自动下载更新",
 
   "update.checkNow": "检查更新",
+  "update.available": "发现新版本 {version}。",
+  "update.download": "下载更新",
   "update.checking": "正在检查更新…",
   "update.downloading": "正在下载更新…",
   "update.downloadingPercent": "正在下载更新… {percent}%",

@@ -7,8 +7,8 @@ import { useSettings } from "./hooks/useSettings";
 import { useUpdater } from "./hooks/useUpdater";
 import {
   describeError,
-  greet,
   isDesktop,
+  normalizeInput,
   readAppInfo,
   type AppInfo,
 } from "./lib/bridge";
@@ -17,7 +17,7 @@ import type { Theme } from "./lib/bridge";
 
 export default function App() {
   const { settings, update, loaded, t } = useSettings();
-  const updater = useUpdater(loaded && settings.automaticUpdates);
+  const updater = useUpdater(loaded ? settings.automaticUpdates : null);
   const [confirmingInstall, setConfirmingInstall] = useState(false);
   const [info, setInfo] = useState<AppInfo | undefined>(undefined);
   const [name, setName] = useState("");
@@ -45,7 +45,10 @@ export default function App() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      setMessage(await greet(name));
+      // The native side returns a value; the wording is chosen here, where the
+      // user's language is known.
+      const value = await normalizeInput(name);
+      setMessage(value ? t("demo.result", { value }) : t("demo.empty"));
     } catch (error) {
       setMessage(isDesktop ? describeError(error) : t("demo.browserHint"));
     }
@@ -117,6 +120,9 @@ export default function App() {
         <UpdateBanner
           state={updater.state}
           t={t}
+          onDownload={() => {
+            void updater.download(false);
+          }}
           onInstall={() => {
             setConfirmingInstall(true);
           }}

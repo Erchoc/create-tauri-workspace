@@ -20,6 +20,8 @@ export const en = {
   "demo.name": "Name",
   "demo.submit": "Run",
   "demo.browserHint": "Run the desktop application to reach the native side.",
+  "demo.result": "The native side returned: {value}",
+  "demo.empty": "The native side returned nothing.",
 
   "runtime.label": "Runtime",
   "runtime.version": "Version",
@@ -35,6 +37,8 @@ export const en = {
   "storage.automaticUpdates": "Download updates automatically",
 
   "update.checkNow": "Check for updates",
+  "update.available": "Version {version} is available.",
+  "update.download": "Download",
   "update.checking": "Checking for updates…",
   "update.downloading": "Downloading the update…",
   "update.downloadingPercent": "Downloading the update… {percent}%",

@@ -10,6 +10,8 @@ export type UpdateState =
   | { kind: "idle" }
   | { kind: "checking" }
   | { kind: "current" }
+  /** Found, not downloaded. Reached when automatic downloads are off. */
+  | { kind: "available"; version: string; notes: string | undefined }
   /** `silent` downloads happen in the background and stay out of the way. */
   | { kind: "downloading"; percent: number | undefined; silent: boolean }
   /** Downloaded and verified. Nothing is installed until the user agrees. */
@@ -24,11 +26,17 @@ type Update = NonNullable<
 /**
  * Drives the update lifecycle: check, download, then install on request.
  *
- * The download runs as soon as an update is found, so that agreeing to install
- * is instant rather than a wait behind a progress bar. Installing is never
- * automatic: it closes the application, which has to be the user's decision.
+ * Checking and downloading are separate decisions. The check always runs, so
+ * someone who turned automatic downloads off still learns that an update
+ * exists — it costs a few kilobytes. The download is what the preference
+ * governs, because it spends real bandwidth. Installing is never automatic
+ * under either setting: it closes the application.
+ *
+ * `automaticDownload` is null until the stored preference has loaded. The
+ * check waits for it: firing earlier would decide whether to download using a
+ * default the user may have turned off.
  */
-export function useUpdater(automatic: boolean) {
+export function useUpdater(automaticDownload: boolean | null) {
   const [state, setState] = useState<UpdateState>(
     isDesktop ? { kind: "idle" } : { kind: "unsupported" },
   );
@@ -36,37 +44,57 @@ export function useUpdater(automatic: boolean) {
   const started = useRef(false);
 
   const download = useCallback(
-    async (update: Update, silent: boolean): Promise<void> => {
+    async (silent: boolean): Promise<void> => {
+      const update = pending.current;
+      if (!update) {
+        return;
+      }
       setState({ kind: "downloading", percent: undefined, silent });
-      let downloaded = 0;
-      let total: number | undefined;
+      try {
+        let downloaded = 0;
+        let total: number | undefined;
 
-      await update.download((event) => {
-        if (event.event === "Started") {
-          total = event.data.contentLength;
-        } else if (event.event === "Progress") {
-          downloaded += event.data.chunkLength;
+        await update.download((event) => {
+          if (event.event === "Started") {
+            total = event.data.contentLength;
+          } else if (event.event === "Progress") {
+            downloaded += event.data.chunkLength;
+            setState({
+              kind: "downloading",
+              percent: total
+                ? Math.round((downloaded / total) * 100)
+                : undefined,
+              silent,
+            });
+          }
+        });
+
+        setState({
+          kind: "ready",
+          version: update.version,
+          notes: update.body ?? undefined,
+        });
+      } catch (error) {
+        if (silent) {
+          // A failed background download should leave the update offered
+          // rather than replace it with an error the user did not ask for.
+          console.warn("Automatic download failed", error);
           setState({
-            kind: "downloading",
-            percent: total ? Math.round((downloaded / total) * 100) : undefined,
-            silent,
+            kind: "available",
+            version: update.version,
+            notes: update.body ?? undefined,
           });
+          return;
         }
-      });
-
-      setState({
-        kind: "ready",
-        version: update.version,
-        notes: update.body ?? undefined,
-      });
+        setState({ kind: "failed", message: describeError(error) });
+      }
     },
     [],
   );
 
   /**
-   * `silent` is used by the check that runs at launch. Someone who is offline
-   * should not meet an error banner they did not ask for, and a background
-   * download should not take over the interface.
+   * `silent` is used by the check that runs at launch, so that being offline
+   * does not raise an error banner nobody asked for.
    */
   const check = useCallback(
     async (silent = false): Promise<void> => {
@@ -93,17 +121,25 @@ export function useUpdater(automatic: boolean) {
         }
 
         pending.current = update;
-        await download(update, silent);
+        if (automaticDownload) {
+          await download(silent);
+        } else {
+          setState({
+            kind: "available",
+            version: update.version,
+            notes: update.body ?? undefined,
+          });
+        }
       } catch (error) {
         if (silent) {
-          console.warn("Automatic update failed", error);
+          console.warn("Automatic update check failed", error);
           setState({ kind: "idle" });
           return;
         }
         setState({ kind: "failed", message: describeError(error) });
       }
     },
-    [download],
+    [automaticDownload, download],
   );
 
   /** Installs the downloaded update and restarts. Ask the user first. */
@@ -122,14 +158,15 @@ export function useUpdater(automatic: boolean) {
     }
   }, []);
 
-  // One automatic check per launch, and only when the user allows it.
+  // One check per launch, once the preference is known. It runs whichever way
+  // that preference points.
   useEffect(() => {
-    if (!automatic || started.current || !isDesktop) {
+    if (automaticDownload === null || started.current || !isDesktop) {
       return;
     }
     started.current = true;
     void check(true);
-  }, [automatic, check]);
+  }, [automaticDownload, check]);
 
-  return { state, check, install };
+  return { state, check, download, install };
 }

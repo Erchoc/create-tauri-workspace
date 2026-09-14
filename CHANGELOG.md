@@ -9,6 +9,13 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The update check now always runs on launch. `automaticUpdates` governs only
+  the download, so someone who turned it off is still told an update exists and
+  gets a button to fetch it, with visible progress. Previously the setting
+  silenced the check itself, which left those users unaware of any update.
+- The native demo command returns a value instead of a sentence. A string built
+  in Rust cannot be translated by the interface, and the old one both hardcoded
+  English and named the framework.
 - The starter interface no longer names the framework. It describes the
   application being built, so nothing has to be deleted before shipping.
 - Every user-visible string moved into `apps/desktop/src/locales/`, and the

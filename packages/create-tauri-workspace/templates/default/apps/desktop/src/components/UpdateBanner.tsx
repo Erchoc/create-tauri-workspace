@@ -4,6 +4,7 @@ import type { Translate } from "../lib/i18n";
 type Props = {
   state: UpdateState;
   t: Translate;
+  onDownload: () => void;
   onInstall: () => void;
 };
 
@@ -15,7 +16,7 @@ type Props = {
  * and "unsupported" render nothing either — a project without signing should
  * not advertise an update path it cannot deliver.
  */
-export function UpdateBanner({ state, t, onInstall }: Props) {
+export function UpdateBanner({ state, t, onDownload, onInstall }: Props) {
   if (
     state.kind === "idle" ||
     state.kind === "disabled" ||
@@ -32,6 +33,22 @@ export function UpdateBanner({ state, t, onInstall }: Props) {
         <span className="banner-message">
           {t("update.failed", { message: state.message })}
         </span>
+      </div>
+    );
+  }
+
+  // Found but not downloaded: automatic downloads are off, so the download is
+  // the user's to start.
+  if (state.kind === "available") {
+    return (
+      <div className="banner" role="status">
+        <span className="banner-message">
+          {t("update.available", { version: state.version })}
+          {state.notes ? ` ${state.notes}` : ""}
+        </span>
+        <button className="button" type="button" onClick={onDownload}>
+          {t("update.download")}
+        </button>
       </div>
     );
   }

@@ -5,8 +5,8 @@ use crate::settings;
 use crate::updater::{self, UpdateStatus};
 
 #[tauri::command]
-pub fn greet(name: String) -> String {
-    app_core::greeting(&name)
+pub fn normalize(input: String) -> String {
+    app_core::normalize(&input)
 }
 
 #[tauri::command]

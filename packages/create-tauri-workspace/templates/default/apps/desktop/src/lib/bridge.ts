@@ -30,8 +30,9 @@ export type UpdateStatus = {
 /** False while running `bun run frontend:dev` in a browser. */
 export const isDesktop = isTauri();
 
-export function greet(name: string): Promise<string> {
-  return invoke<string>("greet", { name });
+/** Returns the value the native side produced. Wording belongs to the caller. */
+export function normalizeInput(input: string): Promise<string> {
+  return invoke<string>("normalize", { input });
 }
 
 export function readAppInfo(): Promise<AppInfo> {

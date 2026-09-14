@@ -53,17 +53,24 @@ application reads it from the endpoint written into the configuration.
 
 ### How an update reaches a user
 
-1. **On launch**, if the user has automatic updates on, the application asks
-   the endpoint whether a newer version exists. Nothing is shown: a failed
-   check on a flaky connection is not the user's problem.
-2. **If one exists it downloads immediately**, in the background, and verifies
-   the signature. Still nothing is shown — a half-finished download is not
-   something the user can act on.
-3. **Once downloaded**, a banner appears: *"Version X is downloaded and ready
-   to install."*
-4. **The user clicks Install now**, and a modal explains that the application
-   will close, install, and reopen. Nothing has been installed yet.
-5. **Only when the user confirms** does the install run, followed by a restart.
+**The check always runs on launch**, whatever the download preference says.
+Learning that an update exists costs a few kilobytes, and someone who turned
+automatic downloads off still wants to know. A failed check stays silent: being
+offline is not the user's problem to read about.
+
+What happens next depends on the **Download updates automatically** setting.
+
+*With it on*, the download starts immediately and silently, and the signature is
+verified. Nothing is shown until it finishes, because a half-finished download
+is not something anyone can act on. Then a banner offers to install.
+
+*With it off*, a banner says a version is available and offers to download.
+That download shows progress, because the user asked for it and is waiting.
+When it finishes, the same install banner appears.
+
+**Either way the install is a separate, explicit step.** Clicking it opens a
+modal explaining that the application will close, install, and reopen; the safe
+answer holds focus. Nothing is installed until the user confirms.
 
 Installing is never automatic, because it closes the application. A user with
 unsaved work decides when that happens, not the updater.
