@@ -38,7 +38,10 @@
 - Declare every Rust command the frontend calls in `apps/desktop/src/lib/bridge.ts`
   and nowhere else.
 - Add a plugin permission to `crates/app/capabilities/default.json` only when a
-  command actually needs it.
+  command actually needs it. `build.removeUnusedCommands` is on, so a release
+  build drops every built-in command the capabilities do not permit: calling
+  one from the frontend without adding its permission fails as an unknown
+  command rather than a denied one.
 - Use `#[cfg(target_os = "...")]` for platform-specific Rust behaviour, and keep
   desktop-only plugins behind `#[cfg(desktop)]`.
 - Do not add a new crate until it has a distinct dependency or testing boundary.

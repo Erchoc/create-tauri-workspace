@@ -255,6 +255,38 @@ To keep publishing through GitHub Actions, add a step after `tauri-action`
 that uploads the artifacts and `latest.json` to your bucket. Keep the GitHub
 Release as the build record even when downloads move.
 
+## Bundle size
+
+Every platform reuses the webview the operating system already ships, except
+the Linux AppImage, which carries its own. Measured on this starter with
+nothing added:
+
+| Artifact | Size |
+| --- | --- |
+| Executable, stripped | 6.1 MB |
+| `.deb` / `.rpm` | 2.8 MB |
+| `.AppImage` | 74 MB |
+
+macOS and Windows land near the package figure rather than the AppImage one.
+Both embed the frontend into the executable and call the system webview:
+WKWebView on macOS, WebView2 on Windows, which
+`bundle.windows.webviewInstallMode` fetches on the rare machine that lacks it
+instead of embedding a copy.
+
+The AppImage is the outlier by design. It runs on any distribution without
+installing anything, so it carries GTK and WebKitGTK itself: 91 MB of
+`libwebkit2gtk`, 31 MB of `libjavascriptcoregtk` and 29 MB of ICU data before
+compression. Offer `.deb` and `.rpm` to users who can install a package, and
+keep the AppImage for everyone else.
+
+An update downloads the bundle for the platform it is running on, so only
+AppImage users ever pay the AppImage size.
+
+The release profile in `Cargo.toml` is already tuned for this: `opt-level = "s"`,
+`lto = true`, `panic = "abort"`, `strip = true`. `build.removeUnusedCommands`
+drops every built-in command the capability files do not permit, which is most
+of the window and webview API in a starter that never calls it.
+
 ## Local builds
 
 ```bash
